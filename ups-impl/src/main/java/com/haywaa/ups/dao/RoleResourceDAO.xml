@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.haywaa.ups.dao.RoleResourceDAO">
+
+<!--auto generated Code-->
+    <resultMap id="AllColumnMap" type="com.haywaa.ups.domain.entity.RoleResourceDO">
+        <result column="role_id" property="roleId"/>
+        <result column="resource_id" property="resourceId"/>
+        <result column="id" property="id"/>
+        <result column="creator" property="creator"/>
+        <result column="modifier" property="modifier"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_time" property="updatedTime"/>
+    </resultMap>
+
+<!--auto generated Code-->
+    <sql id="all_column">
+        role_id,
+        resource_id,
+        id,
+        creator,
+        modifier,
+        created_time,
+        updated_time
+    </sql>
+
+<!--auto generated Code-->
+    <insert id="insert">
+        INSERT INTO permission_role_resource
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pojo.roleId != null"> role_id, </if>
+            <if test="pojo.resourceId != null"> resource_id, </if>
+            <if test="pojo.id != null"> id, </if>
+            <if test="pojo.creator != null"> creator, </if>
+            <if test="pojo.modifier != null"> modifier, </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pojo.roleId != null"> #{pojo.roleId}, </if>
+            <if test="pojo.resourceId != null"> #{pojo.resourceId}, </if>
+            <if test="pojo.id != null"> #{pojo.id}, </if>
+            <if test="pojo.creator != null"> #{pojo.creator}, </if>
+            <if test="pojo.modifier != null"> #{pojo.modifier}, </if>
+        </trim>
+    </insert>
+
+<!--auto generated Code-->
+    <insert id="insertList">
+        INSERT INTO permission_role_resource(
+        <include refid="all_column"/>
+        )VALUES
+        <foreach collection="pojos" item="pojo" index="index" separator=",">
+            (
+            #{pojo.roleId},
+            #{pojo.resourceId},
+            #{pojo.id},
+            #{pojo.creator},
+            #{pojo.modifier},
+            now(),
+            now()
+            )
+        </foreach>
+        ON DUPLICATE KEY UPDATE updated_time = now()
+    </insert>
+
+<!--auto generated Code-->
+    <update id="update">
+        UPDATE permission_role_resource
+        <set>
+            <if test="pojo.roleId != null"> role_id = #{pojo.roleId}, </if>
+            <if test="pojo.resourceId != null"> resource_id = #{pojo.resourceId}, </if>
+            <if test="pojo.id != null"> id = #{pojo.id}, </if>
+            <if test="pojo.creator != null"> creator = #{pojo.creator}, </if>
+            <if test="pojo.modifier != null"> modifier = #{pojo.modifier} </if>
+        </set>
+         WHERE id = #{pojo.id}
+    </update>
+
+<!--auto generated Code-->
+    <select id="select" resultMap="AllColumnMap">
+        SELECT <include refid="all_column"/>
+        FROM permission_role_resource
+        <where>
+            <if test="pojo.roleId != null"> AND role_id = #{pojo.roleId} </if>
+            <if test="pojo.resourceId != null"> AND resource_id = #{pojo.resourceId} </if>
+            <if test="pojo.id != null"> AND id = #{pojo.id} </if>
+            <if test="pojo.creator != null"> AND creator = #{pojo.creator} </if>
+            <if test="pojo.modifier != null"> AND modifier = #{pojo.modifier} </if>
+        </where>
+        LIMIT 1000 
+    </select>
+
+    <select id="selectResourceIds" resultType="java.lang.Integer">
+        SELECT resource_id
+        FROM permission_role_resource
+        WHERE role_id = #{pojo.roleId}
+    </select>
+
+    <select id="selectByRoleIds" resultMap="AllColumnMap">
+        SELECT <include refid="all_column"/>
+        FROM permission_role_resource
+        WHERE role_id in
+            <foreach collection="roleIds" index="index" item="item" open="(" separator="," close=")">
+                #{item,jdbcType=INTEGER}
+            </foreach>
+    </select>
+
+
+<!--auto generated Code-->
+    <delete id="delete">
+        DELETE FROM permission_role_resource where id = #{id}
+    </delete>
+</mapper>

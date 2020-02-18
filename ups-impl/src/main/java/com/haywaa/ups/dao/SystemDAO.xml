@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.haywaa.ups.dao.SystemDAO">
+
+<!--auto generated Code-->
+    <resultMap id="AllColumnMap" type="com.haywaa.ups.domain.entity.SystemDO">
+        <result column="code" property="code"/>
+        <result column="name" property="name"/>
+        <result column="status" property="status"/>
+        <result column="id" property="id"/>
+        <result column="creator" property="creator"/>
+        <result column="modifier" property="modifier"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_time" property="updatedTime"/>
+    </resultMap>
+
+<!--auto generated Code-->
+    <sql id="all_column">
+        code,
+        name,
+        status,
+        id,
+        creator,
+        modifier,
+        created_time,
+        updated_time
+    </sql>
+
+<!--auto generated Code-->
+    <insert id="insert">
+        INSERT INTO permission_system
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pojo.code != null"> code, </if>
+            <if test="pojo.name != null"> name, </if>
+            <if test="pojo.status != null"> status, </if>
+            <if test="pojo.id != null"> id, </if>
+            <if test="pojo.creator != null"> creator, </if>
+            <if test="pojo.modifier != null"> modifier, </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pojo.code != null"> #{pojo.code}, </if>
+            <if test="pojo.name != null"> #{pojo.name}, </if>
+            <if test="pojo.status != null"> #{pojo.status}, </if>
+            <if test="pojo.id != null"> #{pojo.id}, </if>
+            <if test="pojo.creator != null"> #{pojo.creator}, </if>
+            <if test="pojo.modifier != null"> #{pojo.modifier}, </if>
+        </trim>
+    </insert>
+
+<!--auto generated Code-->
+    <insert id="insertList">
+        INSERT INTO permission_system(
+        <include refid="all_column"/>
+        )VALUES
+        <foreach collection="pojos" item="pojo" index="index" separator=",">
+            (
+            #{pojo.code},
+            #{pojo.name},
+            #{pojo.status},
+            #{pojo.id},
+            #{pojo.creator},
+            #{pojo.modifier}
+            )
+        </foreach>
+    </insert>
+
+<!--auto generated Code-->
+    <update id="update">
+        UPDATE permission_system
+        <set>
+            <if test="pojo.name != null"> name = #{pojo.name}, </if>
+            <if test="pojo.status != null"> status = #{pojo.status}, </if>
+            <if test="pojo.creator != null"> creator = #{pojo.creator}, </if>
+            <if test="pojo.modifier != null"> modifier = #{pojo.modifier} </if>
+        </set>
+         WHERE id = #{pojo.id}
+    </update>
+
+<!--auto generated Code-->
+    <select id="select" resultMap="AllColumnMap">
+        SELECT <include refid="all_column"/>
+        FROM permission_system
+        <where>
+            <if test="pojo.code != null"> AND code = #{pojo.code} </if>
+            <if test="pojo.name != null"> AND name = #{pojo.name} </if>
+            <if test="pojo.status != null"> AND status = #{pojo.status} </if>
+            <if test="pojo.id != null"> AND id = #{pojo.id} </if>
+            <if test="pojo.creator != null"> AND creator = #{pojo.creator} </if>
+            <if test="pojo.modifier != null"> AND modifier = #{pojo.modifier} </if>
+        </where>
+        LIMIT 1000 
+    </select>
+
+    <select id="selectAll" resultMap="AllColumnMap">
+        SELECT <include refid="all_column"/>
+        FROM permission_system
+        <where>
+            <if test="status != null"> AND status = #{status} </if>
+        </where>
+    </select>
+
+    <select id="selectValidSystem" resultMap="AllColumnMap">
+        SELECT <include refid="all_column"/>
+        FROM permission_system
+        WHERE status = 1
+    </select>
+
+    <select id="selectByCode" resultMap="AllColumnMap">
+        SELECT <include refid="all_column"/>
+        FROM permission_system
+        WHERE code = #{code}
+    </select>
+
+<!--auto generated Code-->
+    <delete id="delete">
+        DELETE FROM permission_system where id = #{id}
+    </delete>
+</mapper>

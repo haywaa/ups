@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.haywaa.ups.dao.RoleDAO">
+
+<!--auto generated Code-->
+    <resultMap id="AllColumnMap" type="com.haywaa.ups.domain.entity.RoleDO">
+        <result column="code" property="code"/>
+        <result column="name" property="name"/>
+        <result column="system_code" property="systemCode"/>
+        <result column="module_code" property="moduleCode"/>
+        <result column="type" property="type"/>
+        <result column="status" property="status"/>
+        <result column="comment" property="comment"/>
+        <result column="id" property="id"/>
+        <result column="creator" property="creator"/>
+        <result column="modifier" property="modifier"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_time" property="updatedTime"/>
+    </resultMap>
+
+<!--auto generated Code-->
+    <sql id="all_column">
+        code,
+        name,
+        system_code,
+        module_code,
+        type,
+        status,
+        comment,
+        id,
+        creator,
+        modifier,
+        created_time,
+        updated_time
+    </sql>
+
+    <sql id="all_column_role">
+        t.code,
+        t.name,
+        t.system_code,
+        t.module_code,
+        t.type,
+        t.status,
+        t.comment,
+        t.id,
+        t.creator,
+        t.modifier
+    </sql>
+
+<!--auto generated Code-->
+    <insert id="insert">
+        INSERT INTO permission_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pojo.code != null"> code, </if>
+            <if test="pojo.name != null"> name, </if>
+            <if test="pojo.systemCode != null"> system_code, </if>
+            <if test="pojo.moduleCode != null"> module_code, </if>
+            <if test="pojo.type != null"> type, </if>
+            <if test="pojo.status != null"> status, </if>
+            <if test="pojo.comment != null"> comment, </if>
+            <if test="pojo.id != null"> id, </if>
+            <if test="pojo.creator != null"> creator, </if>
+            <if test="pojo.modifier != null"> modifier, </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pojo.code != null"> #{pojo.code}, </if>
+            <if test="pojo.name != null"> #{pojo.name}, </if>
+            <if test="pojo.systemCode != null"> #{pojo.systemCode}, </if>
+            <if test="pojo.moduleCode != null"> #{pojo.moduleCode}, </if>
+            <if test="pojo.type != null"> #{pojo.type}, </if>
+            <if test="pojo.status != null"> #{pojo.status}, </if>
+            <if test="pojo.comment != null"> #{pojo.comment}, </if>
+            <if test="pojo.id != null"> #{pojo.id}, </if>
+            <if test="pojo.creator != null"> #{pojo.creator}, </if>
+            <if test="pojo.modifier != null"> #{pojo.modifier}, </if>
+        </trim>
+    </insert>
+
+<!--auto generated Code-->
+    <insert id="insertList">
+        INSERT INTO permission_role(
+        <include refid="all_column"/>
+        )VALUES
+        <foreach collection="pojos" item="pojo" index="index" separator=",">
+            (
+            #{pojo.code},
+            #{pojo.name},
+            #{pojo.systemCode},
+            #{pojo.moduleCode},
+            #{pojo.type},
+            #{pojo.status},
+            #{pojo.comment},
+            #{pojo.id},
+            #{pojo.creator},
+            #{pojo.modifier}
+            )
+        </foreach>
+    </insert>
+
+<!--auto generated Code-->
+    <update id="update">
+        UPDATE permission_role
+        <set>
+            <if test="pojo.code != null"> code = #{pojo.code}, </if>
+            <if test="pojo.name != null"> name = #{pojo.name}, </if>
+            <if test="pojo.systemCode != null"> system_code = #{pojo.systemCode}, </if>
+            <if test="pojo.moduleCode != null"> module_code = #{pojo.moduleCode}, </if>
+            <if test="pojo.type != null"> type = #{pojo.type}, </if>
+            <if test="pojo.status != null"> status = #{pojo.status}, </if>
+            <if test="pojo.comment != null"> comment = #{pojo.comment}, </if>
+            <if test="pojo.id != null"> id = #{pojo.id}, </if>
+            <if test="pojo.creator != null"> creator = #{pojo.creator}, </if>
+            <if test="pojo.modifier != null"> modifier = #{pojo.modifier} </if>
+        </set>
+         WHERE id = #{pojo.id}
+    </update>
+
+<!--auto generated Code-->
+    <select id="select" resultMap="AllColumnMap">
+        SELECT <include refid="all_column"/>
+        FROM permission_role
+        <where>
+            <if test="pojo.code != null"> AND code = #{pojo.code} </if>
+            <if test="pojo.name != null"> AND name = #{pojo.name} </if>
+            <if test="pojo.systemCode != null"> AND system_code = #{pojo.systemCode} </if>
+            <if test="pojo.moduleCode != null"> AND module_code = #{pojo.moduleCode} </if>
+            <if test="pojo.type != null"> AND type = #{pojo.type} </if>
+            <if test="pojo.status != null"> AND status = #{pojo.status} </if>
+            <if test="pojo.comment != null"> AND comment = #{pojo.comment} </if>
+            <if test="pojo.id != null"> AND id = #{pojo.id} </if>
+            <if test="pojo.creator != null"> AND creator = #{pojo.creator} </if>
+            <if test="pojo.modifier != null"> AND modifier = #{pojo.modifier} </if>
+        </where>
+        LIMIT 1000 
+    </select>
+
+    <select id="selectByCode" resultMap="AllColumnMap">
+        SELECT <include refid="all_column"/>
+        FROM permission_role
+        WHERE code = #{code} AND system_code = #{systemCode}
+    </select>
+
+    <select id="selectById" resultMap="AllColumnMap">
+        SELECT <include refid="all_column"/>
+        FROM permission_role
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectByUserId" resultMap="AllColumnMap">
+        select
+            <include refid="all_column_role"/>
+        from permission_role t
+        join permission_user_role p
+            on t.id=p.role_id
+        where p.user_id=#{userId,jdbcType=INTEGER}
+        <if test="status != null">
+            and t.status=#{status,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <select id="selectBySystemCode" resultMap="AllColumnMap">
+        select
+        <include refid="all_column"/>
+        from permission_role
+        where system_code=#{systemCode}
+        <if test="status != null">
+            and status=#{status,jdbcType=INTEGER}
+        </if>
+    </select>
+
+    <select id="selectAll" resultMap="AllColumnMap">
+        SELECT <include refid="all_column"/>
+        FROM permission_role
+        <where>
+            <if test="query.code != null"> AND code = #{query.code} </if>
+            <if test="query.name != null"> AND name = #{query.name} </if>
+            <if test="query.systemCode != null"> AND system_code = #{query.systemCode} </if>
+            <if test="query.moduleCode != null"> AND module_code = #{query.moduleCode} </if>
+            <if test="query.status != null"> AND status = #{query.status} </if>
+        </where>
+    </select>
+
+<!--auto generated Code-->
+    <delete id="delete">
+        DELETE FROM permission_role where id = #{id}
+    </delete>
+</mapper>

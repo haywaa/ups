@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.haywaa</groupId>
+    <artifactId>ups</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+
+    <description>用户权限管理系统</description>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>deployment</id>
+            <name>internal repository for releases</name>
+            <url>${releaseurl}</url>
+        </repository>
+        <snapshotRepository>
+            <id>deployment</id>
+            <name>internal repository for snapshots</name>
+            <url>${snapshotsurl}</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- 三方库 -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>2.2.1.RELEASE</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>2.1.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.ben-manes.caffeine</groupId>
+                <artifactId>caffeine</artifactId>
+                <version>2.8.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>1.2.62</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.9</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+<modules>  <module>ups-rest</module>
+    <module>ups-client</module>
+    <module>ups-impl</module>
+    <module>ups-server</module>
+  </modules>
+</project>

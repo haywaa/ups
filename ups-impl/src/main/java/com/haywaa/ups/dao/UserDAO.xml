@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.haywaa.ups.dao.UserDAO">
+
+<!--auto generated Code-->
+    <resultMap id="AllColumnMap" type="com.haywaa.ups.domain.entity.UserDO">
+        <result column="usercode" property="usercode"/>
+        <result column="name" property="name"/>
+        <result column="channel" property="channel"/>
+        <result column="third_id" property="thirdId"/>
+        <result column="status" property="status"/>
+        <result column="mobile" property="mobile"/>
+        <result column="id" property="id"/>
+        <result column="creator" property="creator"/>
+        <result column="modifier" property="modifier"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_time" property="updatedTime"/>
+    </resultMap>
+
+<!--auto generated Code-->
+    <sql id="all_column">
+        usercode,
+        name,
+        channel,
+        third_id,
+        status,
+        mobile,
+        id,
+        creator,
+        modifier,
+        created_time,
+        updated_time
+    </sql>
+
+<!--auto generated Code-->
+    <insert id="addOrUpdate">
+        INSERT INTO permission_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pojo.usercode != null"> usercode, </if>
+            <if test="pojo.name != null"> name, </if>
+            <if test="pojo.channel != null"> channel, </if>
+            <if test="pojo.thirdId != null"> third_id, </if>
+            <if test="pojo.status != null"> status, </if>
+            <if test="pojo.mobile != null"> mobile, </if>
+            <if test="pojo.id != null"> id, </if>
+            <if test="pojo.creator != null"> creator, </if>
+            <if test="pojo.modifier != null"> modifier, </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pojo.usercode != null"> #{pojo.usercode}, </if>
+            <if test="pojo.name != null"> #{pojo.name}, </if>
+            <if test="pojo.channel != null"> #{pojo.channel}, </if>
+            <if test="pojo.thirdId != null"> #{pojo.thirdId}, </if>
+            <if test="pojo.status != null"> #{pojo.status}, </if>
+            <if test="pojo.mobile != null"> #{pojo.mobile}, </if>
+            <if test="pojo.id != null"> #{pojo.id}, </if>
+            <if test="pojo.creator != null"> #{pojo.creator}, </if>
+            <if test="pojo.modifier != null"> #{pojo.modifier}, </if>
+        </trim>
+        ON DUPLICATE KEY UPDATE
+            <if test="pojo.name != null"> name = #{pojo.name}, </if>
+            <if test="pojo.status != null"> status = #{pojo.status}, </if>
+            <if test="pojo.mobile != null"> mobile = #{pojo.mobile}, </if>
+            <if test="pojo.thirdId != null"> third_id = #{pojo.thirdId}, </if>
+            updated_time = now()
+    </insert>
+
+<!--auto generated Code-->
+    <insert id="insertList">
+        INSERT INTO permission_user(
+        <include refid="all_column"/>
+        )VALUES
+        <foreach collection="pojos" item="pojo" index="index" separator=",">
+            (
+            #{pojo.usercode},
+            #{pojo.name},
+            #{pojo.channel},
+            #{pojo.thirdId},
+            #{pojo.status},
+            #{pojo.mobile},
+            #{pojo.id},
+            #{pojo.creator},
+            #{pojo.modifier}
+            )
+        </foreach>
+    </insert>
+
+<!--auto generated Code-->
+    <update id="update">
+        UPDATE permission_user
+        <set>
+            <if test="pojo.usercode != null"> usercode = #{pojo.usercode}, </if>
+            <if test="pojo.name != null"> name = #{pojo.name}, </if>
+            <if test="pojo.channel != null"> channel = #{pojo.channel}, </if>
+            <if test="pojo.thirdId != null"> third_id = #{pojo.thirdId}, </if>
+            <if test="pojo.status != null"> status = #{pojo.status}, </if>
+            <if test="pojo.mobile != null"> mobile = #{pojo.mobile}, </if>
+            <if test="pojo.id != null"> id = #{pojo.id}, </if>
+            <if test="pojo.creator != null"> creator = #{pojo.creator}, </if>
+            <if test="pojo.modifier != null"> modifier = #{pojo.modifier} </if>
+        </set>
+         WHERE id = #{pojo.id}
+    </update>
+
+<!--auto generated Code-->
+    <select id="select" resultMap="AllColumnMap">
+        SELECT <include refid="all_column"/>
+        FROM permission_user
+        <where>
+            <if test="pojo.usercode != null"> AND usercode = #{pojo.usercode} </if>
+            <if test="pojo.name != null"> AND name = #{pojo.name} </if>
+            <if test="pojo.channel != null"> AND channel = #{pojo.channel} </if>
+            <if test="pojo.thirdId != null"> AND third_id = #{pojo.thirdId} </if>
+            <if test="pojo.status != null"> AND status = #{pojo.status} </if>
+            <if test="pojo.mobile != null"> AND mobile = #{pojo.mobile} </if>
+            <if test="pojo.id != null"> AND id = #{pojo.id} </if>
+            <if test="pojo.creator != null"> AND creator = #{pojo.creator} </if>
+            <if test="pojo.modifier != null"> AND modifier = #{pojo.modifier} </if>
+        </where>
+        LIMIT 1000
+    </select>
+
+    <select id="selectById" resultMap="AllColumnMap">
+        SELECT <include refid="all_column"/>
+        FROM permission_user
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectUserIdByCode" resultType="java.lang.Long">
+        SELECT id
+        FROM permission_user
+        WHERE usercode = #{usercode} AND channel = #{channel}
+    </select>
+
+    <select id="selectUserIdByThirdId" resultType="java.lang.Long">
+        SELECT id
+        FROM permission_user
+        WHERE third_id = #{thirdId} AND channel = #{channel}
+    </select>
+
+<!--auto generated Code-->
+    <delete id="delete">
+        DELETE FROM permission_user where id = #{id}
+    </delete>
+</mapper>

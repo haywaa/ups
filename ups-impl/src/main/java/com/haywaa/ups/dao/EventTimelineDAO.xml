@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.haywaa.ups.dao.EventTimelineDAO">
+
+    <!--auto generated Code-->
+    <resultMap id="AllColumnMap" type="com.haywaa.ups.domain.entity.EventTimelineDO">
+        <result column="event_type" property="eventType"/>
+        <result column="event_code" property="eventCode"/>
+        <result column="val" property="val"/>
+        <result column="val1" property="val1"/>
+        <result column="id" property="id"/>
+        <result column="creator" property="creator"/>
+        <result column="modifier" property="modifier"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_time" property="updatedTime"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="all_column">
+        event_type,
+        event_code,
+        val,
+        val1,
+        id,
+        creator,
+        modifier,
+        created_time,
+        updated_time
+    </sql>
+
+    <!--auto generated Code-->
+    <insert id="insert">
+        INSERT INTO permission_event
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pojo.eventType != null"> event_type, </if>
+            <if test="pojo.eventCode != null"> event_code, </if>
+            <if test="pojo.val != null"> val, </if>
+            <if test="pojo.val1 != null"> val1, </if>
+            <if test="pojo.id != null"> id, </if>
+            <if test="pojo.creator != null"> creator, </if>
+            <if test="pojo.modifier != null"> modifier, </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pojo.eventType != null"> #{pojo.eventType}, </if>
+            <if test="pojo.eventCode != null"> #{pojo.eventCode}, </if>
+            <if test="pojo.val != null"> #{pojo.val}, </if>
+            <if test="pojo.val1 != null"> #{pojo.val1}, </if>
+            <if test="pojo.id != null"> #{pojo.id}, </if>
+            <if test="pojo.creator != null"> #{pojo.creator}, </if>
+            <if test="pojo.modifier != null"> #{pojo.modifier}, </if>
+        </trim>
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertList">
+        INSERT INTO permission_event(
+        <include refid="all_column"/>
+        )VALUES
+        <foreach collection="pojos" item="pojo" index="index" separator=",">
+            (
+            #{pojo.eventType},
+            #{pojo.eventCode},
+            #{pojo.val},
+            #{pojo.val1},
+            #{pojo.id},
+            #{pojo.creator},
+            #{pojo.modifier},
+            now(),
+            now()
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectMaxId" resultType="java.lang.Long">
+        SELECT max(id)
+        FROM permission_event
+    </select>
+
+    <select id="selectNextPage" resultMap="AllColumnMap">
+        SELECT <include refid="all_column"/>
+        FROM permission_event
+        WHERE id <![CDATA[ > ]]> #{nextId}
+        ORDER BY id ASC
+        LIMIT #{pageSize}
+    </select>
+
+
+    <!--auto generated Code-->
+    <delete id="delete">
+        DELETE FROM permission_event where id = #{id}
+    </delete>
+</mapper>

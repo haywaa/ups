@@ -1,0 +1,29 @@
+package com.haywaa.ups.domain.entity;
+
+import com.haywaa.ups.domain.constants.ValidStatus;
+
+import lombok.Data;
+
+/**
+ * @description
+ * @author: haywaa
+ * @create: 2019-11-25 17:37
+ */
+@Data
+public class SystemDO extends BaseDO<Integer> {
+
+    /**
+     * 编号
+     */
+    private String code;
+
+    /**
+     * 名称
+     */
+    private String name;
+
+    /**
+     * 状态 {@link ValidStatus#getCode()}
+     */
+    private Integer status;
+}

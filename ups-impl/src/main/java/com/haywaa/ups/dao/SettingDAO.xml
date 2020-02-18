@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.haywaa.ups.dao.SettingDAO">
+
+<!--auto generated Code-->
+    <resultMap id="AllColumnMap" type="com.haywaa.ups.domain.entity.SettingDO">
+        <result column="code" property="code"/>
+        <result column="key_code" property="key"/>
+        <result column="value" property="value"/>
+        <result column="id" property="id"/>
+        <result column="creator" property="creator"/>
+        <result column="modifier" property="modifier"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="updated_time" property="updatedTime"/>
+    </resultMap>
+
+<!--auto generated Code-->
+    <sql id="all_column">
+        code,
+        key_code,
+        value,
+        id,
+        creator,
+        modifier,
+        created_time,
+        updated_time
+    </sql>
+
+<!--auto generated Code-->
+    <insert id="insert">
+        INSERT INTO permission_setting
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pojo.code != null"> code, </if>
+            <if test="pojo.key != null"> key_code, </if>
+            <if test="pojo.value != null"> value, </if>
+            <if test="pojo.id != null"> id, </if>
+            <if test="pojo.creator != null"> creator, </if>
+            <if test="pojo.modifier != null"> modifier, </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pojo.code != null"> #{pojo.code}, </if>
+            <if test="pojo.key != null"> #{pojo.key}, </if>
+            <if test="pojo.value != null"> #{pojo.value}, </if>
+            <if test="pojo.id != null"> #{pojo.id}, </if>
+            <if test="pojo.creator != null"> #{pojo.creator}, </if>
+            <if test="pojo.modifier != null"> #{pojo.modifier}, </if>
+        </trim>
+    </insert>
+
+<!--auto generated Code-->
+    <insert id="insertList">
+        INSERT INTO permission_setting (
+        <include refid="all_column"/>
+        )VALUES
+        <foreach collection="pojos" item="pojo" index="index" separator=",">
+            (
+            #{pojo.code},
+            #{pojo.key},
+            #{pojo.value},
+            #{pojo.id},
+            #{pojo.creator},
+            #{pojo.modifier}
+            )
+        </foreach>
+    </insert>
+
+<!--auto generated Code-->
+    <update id="update">
+        UPDATE permission_setting
+        <set>
+            <if test="pojo.code != null"> code = #{pojo.code}, </if>
+            <if test="pojo.key != null"> key_code = #{pojo.key}, </if>
+            <if test="pojo.value != null"> value = #{pojo.value}, </if>
+            <if test="pojo.id != null"> id = #{pojo.id}, </if>
+            <if test="pojo.creator != null"> creator = #{pojo.creator}, </if>
+            <if test="pojo.modifier != null"> modifier = #{pojo.modifier} </if>
+        </set>
+         WHERE id = #{pojo.id}
+    </update>
+
+<!--auto generated Code-->
+    <select id="select" resultMap="AllColumnMap">
+        SELECT <include refid="all_column"/>
+        FROM permission_setting
+        <where>
+            <if test="pojo.code != null"> AND code = #{pojo.code} </if>
+            <if test="pojo.key != null"> AND key_code = #{pojo.key} </if>
+            <if test="pojo.value != null"> AND value = #{pojo.value} </if>
+            <if test="pojo.id != null"> AND id = #{pojo.id} </if>
+            <if test="pojo.creator != null"> AND creator = #{pojo.creator} </if>
+            <if test="pojo.modifier != null"> AND modifier = #{pojo.modifier} </if>
+        </where>
+        LIMIT 1000 
+    </select>
+
+<!--auto generated Code-->
+    <delete id="delete">
+        DELETE FROM permission_setting where id = #{id}
+    </delete>
+</mapper>
