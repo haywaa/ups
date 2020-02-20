@@ -47,10 +47,10 @@ public class ResourceParam {
     private String systemCode;
 
     /**
-     * {@link ValidStatus#getCode()}
+     * {@link ValidStatus#toString()}
      * 状态 1 为启用， 0 为禁用
      */
-    private Integer status;
+    private String status;
 
     /**
      * 资源项

@@ -17,4 +17,6 @@ public class EventTimelineDO extends BaseDO<Long> {
     private Object val;
 
     private Object val1;
+
+    private Object val2;
 }

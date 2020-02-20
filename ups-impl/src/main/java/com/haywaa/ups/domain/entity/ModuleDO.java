@@ -28,7 +28,7 @@ public class ModuleDO extends BaseDO<Integer> {
     private String systemCode;
 
     /**
-     * 状态 {@link ValidStatus#getCode()}
+     * 状态 {@link ValidStatus#toString()}
      */
-    private Integer status;
+    private String status;
 }

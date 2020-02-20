@@ -1,5 +1,7 @@
 package com.haywaa.ups.domain.entity;
 
+import com.haywaa.ups.domain.constants.ValidStatus;
+
 import lombok.Data;
 
 /**
@@ -36,9 +38,9 @@ public class RoleDO extends BaseDO<Integer> {
     private Integer type;
 
     /**
-     * 状态 1 为启用 0 为禁用
+     * @see ValidStatus#toString()
      */
-    private Integer status;
+    private String status;
 
     /**
      * 描述

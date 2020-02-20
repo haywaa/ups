@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.haywaa.ups.domain.constants.RoleType;
+import com.haywaa.ups.domain.constants.ValidStatus;
 
 import lombok.Data;
 
@@ -27,7 +28,10 @@ public class RoleVO {
 
     private Integer type;
 
-    private Integer status;
+    /**
+     * @see ValidStatus#toString()
+     */
+    private String status;
 
     private String comment;
 

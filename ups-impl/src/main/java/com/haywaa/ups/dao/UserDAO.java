@@ -16,6 +16,8 @@ public interface UserDAO {
 
     UserDO selectById(@Param("id") Long id);
 
+    List<UserDO> selectByIds(@Param("ids") List<Long> ids);
+
     Long selectUserIdByCode(@Param("channel") String channel, @Param("usercode") String usercode);
 
     Long selectUserIdByThirdId(@Param("channel") String channel, @Param("thirdId") String thirdId);

@@ -155,7 +155,7 @@
             on t.id=p.role_id
         where p.user_id=#{userId,jdbcType=INTEGER}
         <if test="status != null">
-            and t.status=#{status,jdbcType=INTEGER}
+            and t.status=#{status}
         </if>
     </select>
 
@@ -165,7 +165,7 @@
         from permission_role
         where system_code=#{systemCode}
         <if test="status != null">
-            and status=#{status,jdbcType=INTEGER}
+            and status=#{status}
         </if>
     </select>
 

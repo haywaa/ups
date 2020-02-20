@@ -1,5 +1,7 @@
 package com.haywaa.ups.domain.constants;
 
+import com.haywaa.ups.domain.exception.BizException;
+
 /**
  * @description
  * @author: haywaa
@@ -27,5 +29,13 @@ public enum ErrorCode {
 
     public String getErrorMsg() {
         return errorMsg;
+    }
+
+    public BizException toBizException() {
+        throw new BizException(this.errorNo, this.errorMsg);
+    }
+
+    public BizException toBizException(String message) {
+        throw new BizException(this.errorNo, message);
     }
 }

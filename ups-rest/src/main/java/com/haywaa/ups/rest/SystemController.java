@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.haywaa.ups.domain.bo.OperatorInfo;
+import com.haywaa.ups.permission.bo.OperatorInfo;
 import com.haywaa.ups.domain.constants.ErrorCode;
 import com.haywaa.ups.domain.constants.ValidStatus;
 import com.haywaa.ups.domain.entity.SystemDO;
@@ -22,7 +22,7 @@ import com.haywaa.ups.rest.vo.SystemVO;
 import com.haywaa.ups.rest.web.HttpResult;
 import com.haywaa.ups.rest.web.OperateContext;
 import com.haywaa.ups.rest.web.PageData;
-import com.haywaa.ups.service.SystemService;
+import com.haywaa.ups.permission.service.SystemService;
 
 /**
  * @description
@@ -37,7 +37,7 @@ public class SystemController {
     private SystemService systemService;
 
     @PostMapping()
-    public HttpResult insert(String code, String name, Integer status) {
+    public HttpResult insert(String code, String name, String status) {
         OperatorInfo operatorInfo = OperateContext.getNotNull();
 
         if (StringUtils.isBlank(code)) {
@@ -55,7 +55,7 @@ public class SystemController {
         SystemDO systemDO = new SystemDO();
         systemDO.setCode(code);
         systemDO.setName(name);
-        systemDO.setStatus(status == null ? ValidStatus.VALID.getCode() : status);
+        systemDO.setStatus(status == null ? ValidStatus.VALID.toString() : status);
 
         Integer id = systemService.insert(systemDO, operatorInfo);
         return HttpResult.Success(id);
@@ -63,7 +63,7 @@ public class SystemController {
 
     @PostMapping("/{id}")
     public HttpResult update(
-            @PathVariable(name = "id") Integer id, String name, Integer status) {
+            @PathVariable(name = "id") Integer id, String name, String status) {
         OperatorInfo operatorInfo = OperateContext.getNotNull();
 
         if (name == null && status == null) {
@@ -84,7 +84,7 @@ public class SystemController {
     }
 
     @GetMapping(params = {"method=all"})
-    public HttpResult<List> selectAll(Integer status) {
+    public HttpResult<List> selectAll(String status) {
         List<SystemDO> systemDoList = systemService.selectAll(status);
         if (CollectionUtils.isEmpty(systemDoList)) {
             return HttpResult.Success(new ArrayList<>());

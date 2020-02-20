@@ -48,10 +48,10 @@ public class ResourceDO extends BaseDO<Integer> {
     private String systemCode;
 
     /**
-     * {@link ValidStatus#getCode()}
+     * {@link ValidStatus#toString()}
      * 状态 1 为启用中， 0 为已禁用
      */
-    private Integer status;
+    private String status;
 
     /**
      * 资源项

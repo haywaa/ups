@@ -10,38 +10,31 @@ public enum ValidStatus {
     /**
      *
      */
-    INVALID(0, "已禁用"),
+    INVALID("已禁用"),
 
     /**
      * 菜单
      */
-    VALID(1, "已启用");
-
-    private final int code;
+    VALID("已启用");
 
     private final String zhName;
 
-    ValidStatus(int code, String zhName) {
-        this.code = code;
+    ValidStatus(String zhName) {
         this.zhName = zhName;
-    }
-
-    public int getCode() {
-        return code;
     }
 
     public String getZhName() {
         return zhName;
     }
 
-    public static ValidStatus codeOf(Integer code) {
-        if (code == null) {
+    public static ValidStatus codeOf(String value) {
+        if (value == null) {
             return null;
         }
 
-        for (ValidStatus value : ValidStatus.values()) {
-            if (value.getCode() == code) {
-                return value;
+        for (ValidStatus item : ValidStatus.values()) {
+            if (item.toString().equals(value)) {
+                return item;
             }
         }
 

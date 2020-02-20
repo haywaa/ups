@@ -127,6 +127,15 @@
         WHERE id = #{id}
     </select>
 
+    <select id="selectByIds" resultMap="AllColumnMap">
+        SELECT <include refid="all_column"/>
+        FROM permission_user
+        WHERE id IN
+        <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
     <select id="selectUserIdByCode" resultType="java.lang.Long">
         SELECT id
         FROM permission_user

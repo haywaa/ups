@@ -4,8 +4,11 @@
 
 <!--auto generated Code-->
     <resultMap id="AllColumnMap" type="com.haywaa.ups.domain.entity.UserRoleDO">
-        <result column="uid" property="userId"/>
+        <result column="user_id" property="userId"/>
+        <result column="channel" property="channel"/>
         <result column="role_id" property="roleId"/>
+        <result column="related_key" property="relatedKey"/>
+        <result column="system_code" property="systemCode"/>
         <result column="id" property="id"/>
         <result column="creator" property="creator"/>
         <result column="modifier" property="modifier"/>
@@ -15,8 +18,11 @@
 
 <!--auto generated Code-->
     <sql id="all_column">
-        uid,
+        user_id,
+        channel,
         role_id,
+        related_key,
+        system_code,
         id,
         creator,
         modifier,
@@ -28,8 +34,11 @@
     <insert id="insert">
         INSERT INTO permission_user_role
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="pojo.userId != null"> uid, </if>
+            <if test="pojo.userId != null"> user_id, </if>
+            <if test="pojo.channel != null"> channel, </if>
             <if test="pojo.roleId != null"> role_id, </if>
+            <if test="pojo.relatedKey != null"> related_key, </if>
+            <if test="pojo.systemCode != null"> system_code, </if>
             <if test="pojo.id != null"> id, </if>
             <if test="pojo.creator != null"> creator, </if>
             <if test="pojo.modifier != null"> modifier, </if>
@@ -37,7 +46,10 @@
         VALUES
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="pojo.userId != null"> #{pojo.userId}, </if>
+            <if test="pojo.channel != null"> #{pojo.channel}, </if>
             <if test="pojo.roleId != null"> #{pojo.roleId}, </if>
+            <if test="pojo.relatedKey != null"> #{pojo.relatedKey}, </if>
+            <if test="pojo.systemCode != null"> #{pojo.systemCode}, </if>
             <if test="pojo.id != null"> #{pojo.id}, </if>
             <if test="pojo.creator != null"> #{pojo.creator}, </if>
             <if test="pojo.modifier != null"> #{pojo.modifier}, </if>
@@ -52,7 +64,10 @@
         <foreach collection="pojos" item="pojo" index="index" separator=",">
             (
             #{pojo.userId},
+            #{pojo.channel},
             #{pojo.roleId},
+            #{pojo.relatedKey},
+            #{pojo.systemCode},
             #{pojo.id},
             #{pojo.creator},
             #{pojo.modifier},
@@ -67,8 +82,11 @@
     <update id="update">
         UPDATE permission_user_role
         <set>
-            <if test="pojo.userId != null"> uid = #{pojo.userId}, </if>
+            <if test="pojo.userId != null"> user_id = #{pojo.userId}, </if>
+            <if test="pojo.channel != null"> channel = #{pojo.channel}, </if>
             <if test="pojo.roleId != null"> role_id = #{pojo.roleId}, </if>
+            <if test="pojo.relatedKey != null"> related_key = #{pojo.relatedKey}, </if>
+            <if test="pojo.systemCode != null"> system_code = #{pojo.systemCode}, </if>
             <if test="pojo.id != null"> id = #{pojo.id}, </if>
             <if test="pojo.creator != null"> creator = #{pojo.creator}, </if>
             <if test="pojo.modifier != null"> modifier = #{pojo.modifier} </if>
@@ -81,8 +99,11 @@
         SELECT <include refid="all_column"/>
         FROM permission_user_role
         <where>
-            <if test="pojo.userId != null"> AND uid = #{pojo.userId} </if>
+            <if test="pojo.userId != null"> AND user_id = #{pojo.userId} </if>
+            <if test="pojo.channel != null"> AND channel = #{pojo.channel} </if>
             <if test="pojo.roleId != null"> AND role_id = #{pojo.roleId} </if>
+            <if test="pojo.relatedKey != null"> AND related_key = #{pojo.relatedKey}, </if>
+            <if test="pojo.systemCode != null"> AND system_code = #{pojo.systemCode}, </if>
             <if test="pojo.id != null"> AND id = #{pojo.id} </if>
             <if test="pojo.creator != null"> AND creator = #{pojo.creator} </if>
             <if test="pojo.modifier != null"> AND modifier = #{pojo.modifier} </if>
@@ -90,13 +111,22 @@
         LIMIT 1000 
     </select>
 
+    <select id="selectByUserId" resultMap="AllColumnMap">
+        SELECT <include refid="all_column"/>
+        FROM permission_user_role
+        WHERE
+            user_id = #{userId}
+            AND system_code = #{systemCode}
+    </select>
+
 <!--auto generated Code-->
     <delete id="removeList">
         DELETE FROM permission_user_role
-        where uid = #{userId}
-            AND role_id in
-            <foreach collection="roleIds" index="index" item="item" open="(" separator="," close=")">
-                #{item,jdbcType=INTEGER}
+        where user_id = #{userId}
+            AND channel = #{channel}
+            AND concat(role_id, ':', related_key) in
+            <foreach collection="roleItems" index="index" item="item" open="(" separator="," close=")">
+                #{item}
             </foreach>
     </delete>
 </mapper>

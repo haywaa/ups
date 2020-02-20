@@ -180,7 +180,7 @@
         </if>
         where t.system_code=#{systemCode}
         <if test="status != null">
-            and t.status=#{status,jdbcType=INTEGER}
+            and t.status=#{status}
         </if>
         <if test="status == 1">
             and m.status = 1

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.haywaa.ups.domain.bo.OperatorInfo;
+import com.haywaa.ups.permission.bo.OperatorInfo;
 import com.haywaa.ups.domain.constants.ErrorCode;
 import com.haywaa.ups.domain.constants.ValidStatus;
 import com.haywaa.ups.domain.entity.RoleDO;
@@ -23,7 +23,7 @@ import com.haywaa.ups.rest.param.RoleParam;
 import com.haywaa.ups.rest.vo.RoleVO;
 import com.haywaa.ups.rest.web.HttpResult;
 import com.haywaa.ups.rest.web.OperateContext;
-import com.haywaa.ups.service.RoleService;
+import com.haywaa.ups.permission.service.RoleService;
 import com.haywaa.ups.utils.LangUtil;
 
 /**
@@ -56,7 +56,7 @@ public class RoleController {
         }
 
         if (params.getStatus() == null) {
-            params.setStatus(ValidStatus.VALID.getCode());
+            params.setStatus(ValidStatus.VALID.toString());
         } else {
             if (ValidStatus.codeOf(params.getStatus()) == null) {
                 throw new BizException(ErrorCode.INVALID_PARAM.getErrorNo(), "无效的参数：状态" + params.getStatus());

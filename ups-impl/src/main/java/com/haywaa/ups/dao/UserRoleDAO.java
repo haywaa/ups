@@ -12,7 +12,9 @@ public interface UserRoleDAO {
 
     List<UserRoleDO> select(@Param("pojo") UserRoleDO pojo);
 
+    List<UserRoleDO> selectByUserId(@Param("userId") Long userId, @Param("systemCode") String systemCode);
+
     int update(@Param("pojo") UserRoleDO pojo);
 
-    Integer removeList(Long userId, List<Integer> roleIds);
+    Integer removeList(@Param("userId") Long userId, @Param("channel") String channel, @Param("roleItems") List<String> roleItems);
 }

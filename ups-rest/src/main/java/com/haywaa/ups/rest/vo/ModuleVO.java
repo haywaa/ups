@@ -33,7 +33,7 @@ public class ModuleVO {
     /**
      * 状态 {@link ValidStatus#getCode()}
      */
-    private Integer status;
+    private String status;
 
     private String creator;
 

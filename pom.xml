@@ -28,8 +28,22 @@
         </snapshotRepository>
     </distributionManagement>
 
+    <modules>
+        <module>ups-rest</module>
+        <module>ups-client</module>
+        <module>ups-impl</module>
+        <module>ups-server</module>
+    </modules>
+
     <dependencyManagement>
         <dependencies>
+            <!-- 一方包 -->
+            <dependency>
+                <groupId>com.haywaa</groupId>
+                <artifactId>ups-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <!-- 三方库 -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -64,10 +78,4 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-<modules>  <module>ups-rest</module>
-    <module>ups-client</module>
-    <module>ups-impl</module>
-    <module>ups-server</module>
-  </modules>
 </project>

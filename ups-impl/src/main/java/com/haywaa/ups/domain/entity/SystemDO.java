@@ -23,7 +23,7 @@ public class SystemDO extends BaseDO<Integer> {
     private String name;
 
     /**
-     * 状态 {@link ValidStatus#getCode()}
+     * 状态 {@link ValidStatus#toString()}
      */
-    private Integer status;
+    private String status;
 }

@@ -12,5 +12,11 @@ public class UserRoleDO extends BaseDO<Integer> {
 
     private Long userId;
 
+    private String channel;
+
     private Integer roleId;
+
+    private String relatedKey;
+
+    private String systemCode;
 }

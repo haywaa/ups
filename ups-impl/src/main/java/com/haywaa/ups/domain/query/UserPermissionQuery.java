@@ -18,4 +18,7 @@ public class UserPermissionQuery {
 
     @NonNull
     private Long userId;
+
+    @NonNull
+    private String channel;
 }

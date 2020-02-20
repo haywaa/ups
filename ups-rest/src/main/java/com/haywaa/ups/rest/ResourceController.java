@@ -12,21 +12,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.haywaa.ups.domain.bo.OperatorInfo;
+import com.haywaa.ups.permission.bo.OperatorInfo;
 import com.haywaa.ups.domain.constants.ErrorCode;
 import com.haywaa.ups.domain.constants.ValidStatus;
-import com.haywaa.ups.domain.entity.ModuleDO;
 import com.haywaa.ups.domain.entity.ResourceDO;
 import com.haywaa.ups.domain.exception.BizException;
-import com.haywaa.ups.domain.query.ResourceQuery;
-import com.haywaa.ups.rest.convert.ModuleConvert;
 import com.haywaa.ups.rest.convert.ResourceConvert;
 import com.haywaa.ups.rest.param.ResourceParam;
-import com.haywaa.ups.rest.vo.ModuleVO;
 import com.haywaa.ups.rest.vo.ResourceVO;
 import com.haywaa.ups.rest.web.HttpResult;
 import com.haywaa.ups.rest.web.OperateContext;
-import com.haywaa.ups.service.ResourceService;
+import com.haywaa.ups.permission.service.ResourceService;
 
 /**
  * @description
@@ -54,7 +50,7 @@ public class ResourceController {
         }
 
         if (params.getStatus() == null) {
-            params.setStatus(ValidStatus.VALID.getCode());
+            params.setStatus(ValidStatus.VALID.toString());
         } else {
             if (ValidStatus.codeOf(params.getStatus()) == null) {
                 throw new BizException(ErrorCode.INVALID_PARAM.getErrorNo(), "无效的参数：状态" + params.getStatus());
@@ -84,7 +80,7 @@ public class ResourceController {
     }
 
     @GetMapping(params = {"method=all"})
-    public HttpResult<List<ResourceVO>> tree(String systemCode, Integer status) {
+    public HttpResult<List<ResourceVO>> tree(String systemCode, String status) {
         if (systemCode == null) {
             throw new BizException(ErrorCode.INVALID_PARAM.getErrorNo(), "请求参数异常：缺少系统编号");
         }

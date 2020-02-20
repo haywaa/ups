@@ -21,7 +21,7 @@ public interface ResourceDAO {
 
     ResourceDO selectById(@Param("id") Integer id);
 
-    List<ResourceDO> selectAll(String systemCode, Integer status);
+    List<ResourceDO> selectAll(@Param("systemCode") String systemCode, @Param("status") String status);
 
-    List<ResourceDO> selectBySystemCode(@Param("systemCode") String systemCode, @Param("status") Integer status);
+    List<ResourceDO> selectBySystemCode(@Param("systemCode") String systemCode, @Param("status") String status);
 }

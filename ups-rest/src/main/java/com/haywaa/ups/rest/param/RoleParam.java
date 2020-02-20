@@ -1,5 +1,6 @@
 package com.haywaa.ups.rest.param;
 
+import com.haywaa.ups.domain.constants.ValidStatus;
 import com.haywaa.ups.domain.entity.RoleDO;
 
 import lombok.Data;
@@ -40,9 +41,9 @@ public class RoleParam {
     private Integer type;
 
     /**
-     * 状态 1 为启用 0 为禁用
+     * @see ValidStatus#toString()
      */
-    private Integer status;
+    private String status;
 
     /**
      * 描述

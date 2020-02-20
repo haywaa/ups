@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.haywaa.ups.domain.bo.OperatorInfo;
+import com.haywaa.ups.permission.bo.OperatorInfo;
 import com.haywaa.ups.domain.constants.ErrorCode;
 import com.haywaa.ups.domain.constants.ValidStatus;
 import com.haywaa.ups.domain.entity.ModuleDO;
@@ -22,7 +22,7 @@ import com.haywaa.ups.rest.vo.ModuleVO;
 import com.haywaa.ups.rest.web.HttpResult;
 import com.haywaa.ups.rest.web.OperateContext;
 import com.haywaa.ups.rest.web.PageData;
-import com.haywaa.ups.service.ModuleService;
+import com.haywaa.ups.permission.service.ModuleService;
 
 /**
  * @description
@@ -37,7 +37,7 @@ public class ModuleController {
     private ModuleService moduleService;
 
     @PostMapping()
-    public HttpResult insert(String code, String name, String systemCode, Integer status) {
+    public HttpResult insert(String code, String name, String systemCode, String status) {
         OperatorInfo operatorInfo = OperateContext.getNotNull();
 
         if (StringUtils.isBlank(code)) {
@@ -60,7 +60,7 @@ public class ModuleController {
         moduleDO.setCode(code);
         moduleDO.setName(name);
         moduleDO.setSystemCode(systemCode);
-        moduleDO.setStatus(status == null ? ValidStatus.VALID.getCode() : status);
+        moduleDO.setStatus(status == null ? ValidStatus.VALID.toString() : status);
 
         Integer id = moduleService.insert(moduleDO, operatorInfo);
         return HttpResult.Success(id);
@@ -68,7 +68,7 @@ public class ModuleController {
 
     @PostMapping("/{id}")
     public HttpResult update(
-            @PathVariable(name = "id") Integer id, String name, Integer status) {
+            @PathVariable(name = "id") Integer id, String name, String status) {
         OperatorInfo operatorInfo = OperateContext.getNotNull();
 
         if (StringUtils.isEmpty(name) && status == null) {
@@ -89,7 +89,7 @@ public class ModuleController {
     }
 
     @GetMapping(params = {"method=all"})
-    public HttpResult<List> selectAll(String systemCode, Integer status) {
+    public HttpResult<List> selectAll(String systemCode, String status) {
         if (StringUtils.isEmpty(systemCode)) {
             throw new BizException(ErrorCode.INVALID_PARAM.getErrorNo(), "系统编号必填");
         }

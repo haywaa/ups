@@ -20,5 +20,5 @@ public interface ModuleDAO {
 
     ModuleDO selectById(@Param("id") Integer id);
 
-    List<ModuleDO> selectAll(String systemCode, Integer status);
+    List<ModuleDO> selectAll(String systemCode, String status);
 }

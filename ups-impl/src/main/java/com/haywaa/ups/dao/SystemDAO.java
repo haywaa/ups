@@ -16,7 +16,7 @@ public interface SystemDAO {
 
     List<SystemDO> select(@Param("pojo") SystemDO pojo);
 
-    List<SystemDO> selectAll(Integer status);
+    List<SystemDO> selectAll(String status);
 
     List<SystemDO> selectValidSystem();
 

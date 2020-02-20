@@ -1,11 +1,8 @@
 package com.haywaa.ups.rest.web;
 
-import com.haywaa.ups.domain.bo.OperatorInfo;
+import com.haywaa.ups.permission.bo.OperatorInfo;
 import com.haywaa.ups.domain.constants.ErrorCode;
 import com.haywaa.ups.domain.exception.BizException;
-
-import lombok.Builder;
-import lombok.Getter;
 
 /**
  * @description

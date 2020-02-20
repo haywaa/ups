@@ -8,6 +8,7 @@
         <result column="event_code" property="eventCode"/>
         <result column="val" property="val"/>
         <result column="val1" property="val1"/>
+        <result column="val2" property="val2"/>
         <result column="id" property="id"/>
         <result column="creator" property="creator"/>
         <result column="modifier" property="modifier"/>
@@ -21,6 +22,7 @@
         event_code,
         val,
         val1,
+        val2,
         id,
         creator,
         modifier,
@@ -36,6 +38,7 @@
             <if test="pojo.eventCode != null"> event_code, </if>
             <if test="pojo.val != null"> val, </if>
             <if test="pojo.val1 != null"> val1, </if>
+            <if test="pojo.val2 != null"> val2, </if>
             <if test="pojo.id != null"> id, </if>
             <if test="pojo.creator != null"> creator, </if>
             <if test="pojo.modifier != null"> modifier, </if>
@@ -46,6 +49,7 @@
             <if test="pojo.eventCode != null"> #{pojo.eventCode}, </if>
             <if test="pojo.val != null"> #{pojo.val}, </if>
             <if test="pojo.val1 != null"> #{pojo.val1}, </if>
+            <if test="pojo.val2 != null"> #{pojo.val2}, </if>
             <if test="pojo.id != null"> #{pojo.id}, </if>
             <if test="pojo.creator != null"> #{pojo.creator}, </if>
             <if test="pojo.modifier != null"> #{pojo.modifier}, </if>
@@ -63,6 +67,7 @@
             #{pojo.eventCode},
             #{pojo.val},
             #{pojo.val1},
+            #{pojo.val2},
             #{pojo.id},
             #{pojo.creator},
             #{pojo.modifier},

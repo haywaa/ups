@@ -10,6 +10,13 @@
     <artifactId>ups-impl</artifactId>
 
     <dependencies>
+        <!-- 一方包 -->
+        <dependency>
+            <groupId>com.haywaa</groupId>
+            <artifactId>ups-client</artifactId>
+        </dependency>
+
+        <!-- 三方包 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

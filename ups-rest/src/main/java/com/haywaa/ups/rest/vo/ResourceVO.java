@@ -28,7 +28,7 @@ public class ResourceVO {
 
     private String moduleCode;
 
-    private Integer status;
+    private String status;
 
     /**
      * 排序码
