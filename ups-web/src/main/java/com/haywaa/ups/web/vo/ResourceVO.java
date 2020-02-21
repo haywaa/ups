@@ -1,4 +1,4 @@
-package com.haywaa.ups.rest.vo;
+package com.haywaa.ups.web.vo;
 
 import java.time.LocalDateTime;
 

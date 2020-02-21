@@ -20,7 +20,7 @@ import com.haywaa.ups.domain.constants.RoleType;
 import com.haywaa.ups.domain.entity.UserRoleDO;
 import com.haywaa.ups.permission.bo.OperatorInfo;
 import com.haywaa.ups.domain.constants.ErrorCode;
-import com.haywaa.ups.domain.constants.ResourceType;
+import com.haywaa.ups.rpc.enums.ResourceType;
 import com.haywaa.ups.domain.constants.ValidStatus;
 import com.haywaa.ups.domain.entity.ResourceDO;
 import com.haywaa.ups.domain.entity.RoleDO;
@@ -32,7 +32,6 @@ import com.haywaa.ups.permission.service.ModuleService;
 import com.haywaa.ups.permission.service.OperateAuthCheckService;
 import com.haywaa.ups.permission.service.RoleService;
 import com.haywaa.ups.permission.service.SystemService;
-import com.haywaa.ups.utils.AuthUtil;
 
 /**
  * @description
@@ -162,7 +161,7 @@ public class RoleServiceImpl implements RoleService {
             }
 
             // 对Action授权，不能对菜单进行授权
-            if (resourceDO.getType() == ResourceType.GROUP.getCode()) {
+            if (ResourceType.GROUP.toString().equals(resourceDO.getType())) {
                 it.remove();
                 continue;
             }

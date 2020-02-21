@@ -1,17 +1,20 @@
-package com.haywaa.ups.domain.entity;
+package com.haywaa.ups.web.param;
 
 import com.haywaa.ups.domain.constants.RoleType;
 import com.haywaa.ups.domain.constants.ValidStatus;
+import com.haywaa.ups.domain.entity.RoleDO;
 
 import lombok.Data;
 
 /**
  * @description
  * @author: haywaa
- * @create: 2019-11-25 17:36
+ * @create: 2019-12-02 15:41
  */
 @Data
-public class RoleDO extends BaseDO<Integer> {
+public class RoleParam {
+
+    private Integer id;
 
     /**
      * 角色编号
@@ -34,7 +37,6 @@ public class RoleDO extends BaseDO<Integer> {
     private String moduleCode;
 
     /**
-     * ☆ 仅用于权限系统内部权限管理，不通过API接口返回给三方接入应用
      * admin 且 moduleCode不为空为业务模块管理员，moduleCode为空为系统管理员
      * @see RoleType#toString()
      */
@@ -49,4 +51,17 @@ public class RoleDO extends BaseDO<Integer> {
      * 描述
      */
     private String comment;
+
+    public RoleDO convertToDO() {
+        RoleDO roleDO = new RoleDO();
+        roleDO.setCode(this.getCode());
+        roleDO.setName(this.getName());
+        roleDO.setSystemCode(this.getSystemCode());
+        roleDO.setModuleCode(this.getModuleCode());
+        roleDO.setType(this.getType());
+        roleDO.setStatus(this.getStatus());
+        roleDO.setComment(this.getComment());
+        roleDO.setId(this.getId());
+        return roleDO;
+    }
 }

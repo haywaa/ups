@@ -1,3 +1,3 @@
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.haywaa.ups.rest.autoconfigure.UserPermissionAutoConfiguration
+com.haywaa.ups.rest.autoconfigure.UpsRestAutoConfiguration

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.haywaa.ups.cooperate.CooperateService;
 import com.haywaa.ups.dao.ResourceDAO;
 import com.haywaa.ups.domain.constants.ErrorCode;
-import com.haywaa.ups.domain.constants.ResourceType;
+import com.haywaa.ups.rpc.enums.ResourceType;
 import com.haywaa.ups.domain.entity.ResourceDO;
 import com.haywaa.ups.domain.exception.BizException;
 import com.haywaa.ups.permission.bo.OperatorInfo;
@@ -108,7 +108,7 @@ public class ResourceServiceImpl implements ResourceService {
             throw new BizException(ErrorCode.INVALID_PARAM.getErrorNo(), "无效的参数：父资源不存在");
         }
 
-        if (resourceDO.getType() != ResourceType.GROUP.getCode()) {
+        if (!ResourceType.GROUP.toString().equals(resourceDO.getType())) {
             throw new BizException(ErrorCode.INVALID_PARAM.getErrorNo(), "无效的参数：父资源类型只能为分组");
         }
     }

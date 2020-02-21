@@ -1,4 +1,4 @@
-package com.haywaa.ups.domain.constants;
+package com.haywaa.ups.rpc.enums;
 
 /**
  * @description
@@ -10,24 +10,17 @@ public enum ResourceType {
     /**
      * 分组
      */
-    GROUP(1, "分组"),
+    GROUP("分组"),
 
     /**
      * 操作
      */
-    ACTION(2, "操作");
-
-    private final int code;
+    ACTION("操作");
 
     private final String zhName;
 
-    ResourceType(int code, String zhName) {
-        this.code = code;
+    ResourceType(String zhName) {
         this.zhName = zhName;
-    }
-
-    public int getCode() {
-        return code;
     }
 
     public String getZhName() {

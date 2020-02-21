@@ -3,11 +3,9 @@ package com.haywaa.ups.permission.service.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -25,21 +23,21 @@ import com.haywaa.ups.dao.RoleDAO;
 import com.haywaa.ups.dao.RoleResourceDAO;
 import com.haywaa.ups.dao.SystemDAO;
 import com.haywaa.ups.dao.UserRoleDAO;
-import com.haywaa.ups.domain.entity.UserRoleDO;
-import com.haywaa.ups.permission.bo.ResourceBO;
-import com.haywaa.ups.permission.bo.UserPermissionBO;
-import com.haywaa.ups.permission.cache.RoleCache;
-import com.haywaa.ups.permission.cache.UserPermissionCache;
 import com.haywaa.ups.domain.constants.ErrorCode;
 import com.haywaa.ups.domain.constants.ValidStatus;
 import com.haywaa.ups.domain.entity.ModuleDO;
 import com.haywaa.ups.domain.entity.ResourceDO;
 import com.haywaa.ups.domain.entity.RoleDO;
 import com.haywaa.ups.domain.entity.SystemDO;
+import com.haywaa.ups.domain.entity.UserRoleDO;
 import com.haywaa.ups.domain.exception.BizException;
 import com.haywaa.ups.domain.query.UserPermissionQuery;
+import com.haywaa.ups.permission.bo.ResourceBO;
+import com.haywaa.ups.permission.cache.RoleCache;
+import com.haywaa.ups.permission.cache.UserPermissionCache;
 import com.haywaa.ups.permission.convert.ResourceConvert;
 import com.haywaa.ups.permission.service.PermissionQueryService;
+import com.haywaa.ups.rpc.dto.UserPermissionDTO;
 import com.haywaa.ups.user.UserService;
 import com.haywaa.ups.user.bo.UserBO;
 
@@ -94,7 +92,7 @@ public class PermissionQueryServiceImpl implements PermissionQueryService, Initi
     }
 
     @Override
-    public UserPermissionBO queryUserPermission(String systemCode, String channel, String thirdUid) {
+    public UserPermissionDTO queryUserPermission(String systemCode, String channel, String thirdUid) {
         if (systemCode == null) {
             throw new BizException(ErrorCode.INVALID_PARAM.getErrorNo(), "系统编号不能为空");
         }
@@ -112,23 +110,80 @@ public class PermissionQueryServiceImpl implements PermissionQueryService, Initi
             throw new BizException(ErrorCode.INVALID_PARAM.getErrorNo(), "用户ID不存在");
         }
 
+        UserPermissionDTO userPermission = new UserPermissionDTO();
+
         UserPermissionCache permissionCache = userPermissionCache.get(new UserPermissionQuery(systemCode, userId, channel));
-        if (permissionCache != null) {
-            return null;
+        if (permissionCache == null) {
+            return userPermission;
         }
 
-        UserPermissionBO userPermission = new UserPermissionBO();
-        userPermission.setUserInfo(permissionCache.getUser());
+        List<UserPermissionCache.UserRoleItem> userRoleItemList = permissionCache.getUserRoleItems();
+        if (CollectionUtils.isEmpty(userRoleItemList)) {
+            return userPermission;
+        }
 
-        final List<Integer> roleIds = permissionCache.getRoleItems().stream().map(UserPermissionCache.RoleItem::getRoleId).distinct().collect(Collectors.toList());
+        // 获取角色资源列表
+        Map<Integer/*roleId*/, RoleCache> roleCacheMap = systemRoleCache.get(systemCode);
+        if (CollectionUtils.isEmpty(roleCacheMap)) {
+            return userPermission;
+        }
+
+        Map<Integer, List<Integer>> resourceRoleIdMap = new HashMap<>();
+        List<UserPermissionDTO.RoleItem> roleItemList = userRoleItemList.stream().map(userRoleItem -> {
+            final Integer roleId = userRoleItem.getRoleId();
+            RoleCache roleCache = roleCacheMap.get(roleId);
+            if (roleCache == null) {
+                return null;
+            }
+
+            RoleDO roleDO = roleCache.getRole();
+            if (roleDO == null) {
+                return null;
+            }
+
+            Collection<Integer> resourceList = roleCache.getResourceList();
+            if (!CollectionUtils.isEmpty(resourceList)) {
+                for (Integer resId : resourceList) {
+                    List<Integer> roleIdList = resourceRoleIdMap.get(resId);
+                    if (roleIdList == null) {
+                        roleIdList = new ArrayList<>();
+                        resourceRoleIdMap.put(resId, roleIdList);
+                    }
+                    roleIdList.add(roleId);
+                }
+            }
+
+            // 每次查询时通过RoleCache过滤一遍，而不是直接将roleCode缓存到permissionCache中，可以简化role变更（含状态变更）的缓存处理逻辑
+            UserPermissionDTO.RoleItem roleItem = new UserPermissionDTO.RoleItem();
+            roleItem.setRoleId(roleId);
+            roleItem.setRelatedKey(userRoleItem.getRelatedKey());
+            roleItem.setRoleCode(roleItem.getRoleCode());
+            return roleItem;
+        })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        userPermission.setRoleList(roleItemList);
+
+        final List<Integer> roleIds = roleItemList.stream()
+                .map(UserPermissionDTO.RoleItem::getRoleId)
+                .distinct()
+                .collect(Collectors.toList());
         if (CollectionUtils.isEmpty(roleIds)) {
             return userPermission;
         }
 
-        userPermission.setRoleList(selectCachedRoleByRoleIds(systemCode, roleIds));
-
-        List<ResourceBO> resourceList = selectCachedResourceByRoleIds(systemCode, roleIds, null);
-        userPermission.setResouceList(resourceList);
+        List<ResourceBO> resourceList = selectCachedResource(systemCode, resourceRoleIdMap);
+        if (!CollectionUtils.isEmpty(resourceList)) {
+            userPermission.setResouceList(resourceList.stream().map(resourceBO -> {
+                UserPermissionDTO.ResourceItem resourceItem = new UserPermissionDTO.ResourceItem();
+                resourceItem.setCode(resourceBO.getCode());
+                resourceItem.setType(resourceBO.getType());
+                resourceItem.setItems(resourceBO.getItems());
+                resourceItem.setRelatedRoleIds(resourceBO.getRelatedRoleIds());
+                return resourceItem;
+            }).collect(Collectors.toList()));
+        }
 
         return userPermission;
     }
@@ -144,98 +199,22 @@ public class PermissionQueryServiceImpl implements PermissionQueryService, Initi
         }
 
         UserPermissionCache permissionCache = new UserPermissionCache();
-        permissionCache.setUser(userBO);
+        //permissionCache.setUser(userBO);
 
         // 2. 获取用户角色列表
         List<UserRoleDO> userRoleDOList = userRoleDAO.selectByUserId(query.getUserId(), query.getChannel(), query.getSystemCode());
-        if (!CollectionUtils.isEmpty(userRoleDOList)) {
-            permissionCache.setRoleItems(userRoleDOList.stream().map(userRoleDO -> {
-                UserPermissionCache.RoleItem roleItem = new UserPermissionCache.RoleItem();
-                roleItem.setRoleId(userRoleDO.getId());
-                roleItem.setRelatedKey(userRoleDO.getRelatedKey());
-                return roleItem;
-            }).collect(Collectors.toList()));
+        if (CollectionUtils.isEmpty(userRoleDOList)) {
+            return permissionCache;
         }
+
+        permissionCache.setUserRoleItems(userRoleDOList.stream().map(userRoleDO -> {
+            UserPermissionCache.UserRoleItem roleItem = new UserPermissionCache.UserRoleItem();
+            roleItem.setRoleId(userRoleDO.getId());
+            roleItem.setRelatedKey(userRoleDO.getRelatedKey());
+            return roleItem;
+        }).collect(Collectors.toList()));
 
         return permissionCache;
-    }
-
-    /**
-     * 获取角色详细信息
-     */
-    private List<RoleDO> selectCachedRoleByRoleIds(String systemCode, List<Integer> roleIds) {
-        if (systemCode == null || CollectionUtils.isEmpty(roleIds)) {
-            return new ArrayList<>();
-        }
-
-        // 获取角色资源列表
-        Map<Integer/*roleId*/, RoleCache> roleCacheMap = systemRoleCache.get(systemCode);
-        if (CollectionUtils.isEmpty(roleCacheMap)) {
-            return new ArrayList<>();
-        }
-
-        List<RoleDO> roleList = new ArrayList<>(roleIds.size());
-        for (Integer roleId : roleIds) {
-            RoleCache roleCache = roleCacheMap.get(roleId);
-            if (roleCache == null) {
-                continue;
-            }
-            roleList.add(roleCache.getRole());
-        }
-
-        return roleList;
-    }
-
-    /**
-     * 查询角色所拥有的资源权限，如果参数resouceId不为null，则只放回这个resourceId的权限信息
-     */
-    private List<ResourceBO> selectCachedResourceByRoleIds(String systemCode, List<Integer> roleIds, Integer resourceId) {
-        if (systemCode == null || CollectionUtils.isEmpty(roleIds)) {
-            return new ArrayList<>();
-        }
-
-        // 获取角色资源列表
-        Map<Integer/*roleId*/, RoleCache> roleCacheMap = systemRoleCache.get(systemCode);
-        if (CollectionUtils.isEmpty(roleCacheMap)) {
-            return new ArrayList<>();
-        }
-
-        Map<Integer, List<Integer>> resourceRoleIdMap = new HashMap<>();
-        for (Integer roleId : roleIds) {
-            RoleCache roleCache = roleCacheMap.get(roleId);
-            if (roleCache == null) {
-                continue;
-            }
-
-            Collection<Integer> resourceList = roleCache.getResourceList();
-            if (CollectionUtils.isEmpty(resourceList)) {
-                continue;
-            }
-
-            if (resourceId == null) {
-                for (Integer resId : resourceList) {
-                    List<Integer> roleIdList = resourceRoleIdMap.get(resId);
-                    if (roleIdList == null) {
-                        roleIdList = new ArrayList<>();
-                        resourceRoleIdMap.put(resId, roleIdList);
-                    }
-                    roleIdList.add(roleId);
-                }
-            } else if (resourceList.contains(resourceId)) {
-                List<Integer> roleIdList = resourceRoleIdMap.get(resourceId);
-                if (roleIdList == null) {
-                    roleIdList = new ArrayList<>();
-                    resourceRoleIdMap.put(resourceId, roleIdList);
-                }
-                roleIdList.add(roleId);
-            }
-        }
-
-        if (CollectionUtils.isEmpty(resourceRoleIdMap)) {
-            return new ArrayList<>();
-        }
-
-        return selectCachedResource(systemCode, resourceRoleIdMap);
     }
 
     /**
@@ -260,6 +239,7 @@ public class PermissionQueryServiceImpl implements PermissionQueryService, Initi
                 return null;
             }
 
+            // 考虑是否直接缓存BO对象
             ResourceBO resourceBO = ResourceConvert.convertDoToBO(resourceDO);
             resourceBO.setRelatedRoleIds(entry.getValue());
             return  resourceBO;

@@ -31,7 +31,7 @@ import com.zaxxer.hikari.HikariDataSource;
         }, sqlSessionTemplateRef  = "userPermissionSqlSessionTemplate")
 @Configurable
 @ComponentScan(basePackages = "com.haywaa.ups")
-public class UserPermissionAutoConfiguration {
+public class UpsRestAutoConfiguration {
 
     @Bean("userPermissionDatabase")
     @ConfigurationProperties("datasource.ups")

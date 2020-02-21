@@ -15,8 +15,6 @@ import lombok.Data;
 @Data
 public class UserPermissionBO {
 
-    private UserBO userInfo;
-
     private List<RoleDO> roleList;
 
     private List<ResourceBO> resouceList;

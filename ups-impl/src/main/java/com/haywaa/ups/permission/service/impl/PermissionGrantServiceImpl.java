@@ -24,8 +24,8 @@ import com.haywaa.ups.permission.bo.OperatorInfo;
 import com.haywaa.ups.permission.service.OperateAuthCheckService;
 import com.haywaa.ups.permission.service.PermissionGrantService;
 import com.haywaa.ups.permission.service.SystemService;
-import com.haywaa.ups.rpc.request.UserRoleDelReq;
-import com.haywaa.ups.rpc.request.UserRoleGrantReq;
+import com.haywaa.ups.rpc.dto.request.UserRoleDelReq;
+import com.haywaa.ups.rpc.dto.request.UserRoleGrantReq;
 import com.haywaa.ups.user.UserService;
 import com.haywaa.ups.user.bo.UserCheckBO;
 

@@ -33,10 +33,9 @@ public class UserDO extends BaseDO<Long> {
     String thirdId;
 
     /**
-     * {@link ValidStatus#getCode()}
-     * 状态 1 有效 0 禁用
+     * {@link ValidStatus#toString()}
      */
-    Integer status;
+    String status;
 
     /**
      * 手机号

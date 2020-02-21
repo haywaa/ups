@@ -1,4 +1,4 @@
-package com.haywaa.ups.rest.param;
+package com.haywaa.ups.web.param;
 
 import com.haywaa.ups.domain.constants.ValidStatus;
 import com.haywaa.ups.domain.entity.UserDO;
@@ -36,7 +36,6 @@ public class UserParam {
 
     /**
      * {@link ValidStatus#toString()}
-     * 状态 1 有效 0 禁用
      */
     String status;
 

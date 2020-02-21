@@ -1,8 +1,8 @@
 package com.haywaa.ups.permission.service;
 
 import com.haywaa.ups.permission.bo.OperatorInfo;
-import com.haywaa.ups.rpc.request.UserRoleDelReq;
-import com.haywaa.ups.rpc.request.UserRoleGrantReq;
+import com.haywaa.ups.rpc.dto.request.UserRoleDelReq;
+import com.haywaa.ups.rpc.dto.request.UserRoleGrantReq;
 
 /**
  * @description

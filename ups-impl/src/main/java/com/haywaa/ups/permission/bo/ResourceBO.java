@@ -3,7 +3,7 @@ package com.haywaa.ups.permission.bo;
 import java.util.List;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.haywaa.ups.domain.constants.ResourceType;
+import com.haywaa.ups.rpc.enums.ResourceType;
 import com.haywaa.ups.domain.constants.ValidStatus;
 
 import lombok.Data;
@@ -23,10 +23,10 @@ public class ResourceBO {
     private String code;
 
     /**
-     * 资源类型 {@link ResourceType#getCode()}
+     * 资源类型 {@link ResourceType#toString()}
      * 不允许修改
      */
-    private Integer type;
+    private String type;
 
     /**
      * 资源项
@@ -41,6 +41,7 @@ public class ResourceBO {
     /**
      * @see ValidStatus#toString()
      */
+    @JSONField(serialize = false)
     private String status;
 
     /**

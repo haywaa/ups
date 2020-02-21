@@ -1,5 +1,7 @@
 package com.haywaa.ups.user.bo;
 
+import com.haywaa.ups.domain.constants.ValidStatus;
+
 import lombok.Data;
 
 /**
@@ -36,10 +38,9 @@ public class UserBO {
     String thirdId;
 
     /**
-     * {@link ValidStatus#getCode()}
-     * 状态 1 有效 0 禁用
+     * {@link ValidStatus#toString()}
      */
-    Integer status;
+    String status;
 
     /**
      * 手机号

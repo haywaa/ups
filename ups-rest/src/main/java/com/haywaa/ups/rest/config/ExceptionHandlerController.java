@@ -36,6 +36,4 @@ public class ExceptionHandlerController {
         logger.error("controller execption => path: [" + request.getServletPath() + "], params: [" + JSON.toJSONString(request.getParameterMap()) + "]", ex);
         return HttpResult.Failure(ErrorCode.SERVICE_ERROR.getErrorNo(), ErrorCode.SERVICE_ERROR.getErrorMsg());
     }
-
-
 }

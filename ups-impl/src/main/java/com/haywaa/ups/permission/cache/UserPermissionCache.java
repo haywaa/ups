@@ -14,12 +14,12 @@ import lombok.Data;
 @Data
 public class UserPermissionCache {
 
-    private UserBO user;
+    //private UserBO user;
 
-    private List<RoleItem> roleItems;
+    private List<UserRoleItem> userRoleItems;
 
     @Data
-    public static class RoleItem {
+    public static class UserRoleItem {
         private Integer roleId;
         private String relatedKey;
     }

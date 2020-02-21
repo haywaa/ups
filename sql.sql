@@ -2,7 +2,7 @@ CREATE TABLE `permission_system` (
  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '主键',
  `name` varchar(64) DEFAULT NULL COMMENT '应用名称',
  `code` varchar(64) DEFAULT '' COMMENT '应用code',
- `status` tinyint(3) DEFAULT NULL COMMENT '状态:1启用 2停用',
+ `status` varchar(10) DEFAULT NULL COMMENT '状态:1启用 2停用',
  `comment` varchar(255) DEFAULT NULL COMMENT '描述',
  `creator` varchar(50) DEFAULT NULL COMMENT '创建人',
  `modifier` varchar(50) DEFAULT NULL COMMENT '更新人',
@@ -19,7 +19,7 @@ CREATE TABLE `permission_module` (
  `name` varchar(64) DEFAULT NULL COMMENT '应用名称',
  `code` varchar(64) DEFAULT '' COMMENT '应用code',
  `system_code` varchar(64) DEFAULT '' COMMENT '应用code',
- `status` tinyint(3) DEFAULT NULL COMMENT '状态:1启用 2停用',
+ `status` varchar(10) DEFAULT NULL COMMENT '状态:1启用 2停用',
  `comment` varchar(255) DEFAULT NULL COMMENT '描述',
  `creator` varchar(50) DEFAULT NULL COMMENT '创建人',
  `modifier` varchar(50) DEFAULT NULL COMMENT '更新人',
@@ -88,7 +88,7 @@ CREATE TABLE `permission_user` (
   `usercode` varchar(64) DEFAULT NULL COMMENT '用户编号',
   `name` varchar(64) DEFAULT NULL COMMENT '名称',
   `channel` varchar(10) DEFAULT NULL COMMENT '用户来源渠道',
-  `status` tinyint(3) DEFAULT '2' COMMENT '账户状态：1启用,2禁用',
+  `status` VARCHAR(10) NOT NULL COMMENT '用户状态',
   `mobile` varchar(64) DEFAULT NULL COMMENT '手机号码',
   `third_id` varchar(64) DEFAULT NULL COMMENT '渠道用户ID',
   `creator` varchar(50) DEFAULT NULL COMMENT '创建人',
@@ -144,11 +144,11 @@ CREATE TABLE `permission_event` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 INSERT INTO `permission_system`(id, `name`, `code`, `status`, `comment`)
-VALUES (1, '权限系统', 'UPS', 1, '权限管理系统');
+VALUES (1, '权限系统', 'UPS', 'VALID', '权限管理系统');
 
 
 INSERT INTO `permission_role`(id, `name`, `code`, `type`, `status`, `system_code`, `comment`)
-VALUES (1, '超级管理员', 'ROOT', 'ROOT', 1, 'UPS', '超级管理员');
+VALUES (1, '超级管理员', 'ROOT', 'ROOT', 'VALID', 'UPS', '超级管理员');
 
 -- INSERT INTO `permission_user_role`(`uid`, `role_id) VALUES ({uid}, 1);
 

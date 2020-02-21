@@ -1,39 +1,39 @@
-package com.haywaa.ups.rest.vo;
+package com.haywaa.ups.web.vo;
 
 import java.time.LocalDateTime;
+
+import com.haywaa.ups.domain.constants.ValidStatus;
 
 import lombok.Data;
 
 /**
  * @description
  * @author: haywaa
- * @create: 2019-11-26 11:27
+ * @create: 2019-12-02 16:12
  */
 @Data
-public class ResourceVO {
-
+public class ModuleVO {
     private Integer id;
 
+    /**
+     * 编号
+     */
     private String code;
 
-    private String parentCode;
-
+    /**
+     * 名称
+     */
     private String name;
 
-    private String type;
-
-    private String items;
-
+    /**
+     * 系统编号
+     */
     private String systemCode;
 
-    private String moduleCode;
-
-    private String status;
-
     /**
-     * 排序码
+     * 状态 {@link ValidStatus#toString()}
      */
-    private Integer sortNum;
+    private String status;
 
     private String creator;
 

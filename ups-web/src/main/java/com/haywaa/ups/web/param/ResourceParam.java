@@ -1,4 +1,4 @@
-package com.haywaa.ups.rest.param;
+package com.haywaa.ups.web.param;
 
 import com.haywaa.ups.rpc.enums.ResourceType;
 import com.haywaa.ups.domain.constants.ValidStatus;

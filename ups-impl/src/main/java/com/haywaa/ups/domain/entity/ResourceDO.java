@@ -1,6 +1,6 @@
 package com.haywaa.ups.domain.entity;
 
-import com.haywaa.ups.domain.constants.ResourceType;
+import com.haywaa.ups.rpc.enums.ResourceType;
 import com.haywaa.ups.domain.constants.ValidStatus;
 
 import lombok.Data;
@@ -30,10 +30,10 @@ public class ResourceDO extends BaseDO<Integer> {
     private String name;
 
     /**
-     * 资源类型 {@link ResourceType#getCode()}
+     * 资源类型 {@link ResourceType#toString)}
      * 不允许修改
      */
-    private Integer type;
+    private String type;
 
     /**
      * 业务模块编号

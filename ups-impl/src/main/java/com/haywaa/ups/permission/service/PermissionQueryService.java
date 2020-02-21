@@ -1,6 +1,6 @@
 package com.haywaa.ups.permission.service;
 
-import com.haywaa.ups.permission.bo.UserPermissionBO;
+import com.haywaa.ups.rpc.dto.UserPermissionDTO;
 
 /**
  * @description
@@ -12,7 +12,7 @@ public interface PermissionQueryService {
     /**
      *
      */
-    UserPermissionBO queryUserPermission(String systemCode, String channel, String thirdId);
+    UserPermissionDTO queryUserPermission(String systemCode, String channel, String thirdId);
 
     void handleSystemUpdatedEvent(Integer systemId, String systemCode);
 

@@ -1,4 +1,4 @@
-package com.haywaa.ups.rpc.request;
+package com.haywaa.ups.rpc.dto.request;
 
 import java.util.List;
 
