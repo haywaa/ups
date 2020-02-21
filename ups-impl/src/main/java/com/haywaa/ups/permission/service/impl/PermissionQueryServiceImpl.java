@@ -147,7 +147,7 @@ public class PermissionQueryServiceImpl implements PermissionQueryService, Initi
         permissionCache.setUser(userBO);
 
         // 2. 获取用户角色列表
-        List<UserRoleDO> userRoleDOList = userRoleDAO.selectByUserId(query.getUserId(), query.getSystemCode());
+        List<UserRoleDO> userRoleDOList = userRoleDAO.selectByUserId(query.getUserId(), query.getChannel(), query.getSystemCode());
         if (!CollectionUtils.isEmpty(userRoleDOList)) {
             permissionCache.setRoleItems(userRoleDOList.stream().map(userRoleDO -> {
                 UserPermissionCache.RoleItem roleItem = new UserPermissionCache.RoleItem();

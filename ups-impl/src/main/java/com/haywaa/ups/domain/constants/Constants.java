@@ -7,7 +7,9 @@ package com.haywaa.ups.domain.constants;
  */
 public class Constants {
 
-    private static final String SETTING_CONFIG = "config";
+    public static final String SETTING_CONFIG = "config";
 
-    private static final String CONFIG_USER_CHANNEL = "user_channel";
+    public static final String CONFIG_USER_CHANNEL = "user_channel";
+
+    public static final String SYSTEM_UPS = "ups";
 }

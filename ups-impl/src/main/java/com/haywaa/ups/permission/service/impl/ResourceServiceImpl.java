@@ -5,19 +5,17 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.haywaa.ups.cooperate.CooperateService;
 import com.haywaa.ups.dao.ResourceDAO;
-import com.haywaa.ups.permission.bo.OperatorInfo;
 import com.haywaa.ups.domain.constants.ErrorCode;
 import com.haywaa.ups.domain.constants.ResourceType;
 import com.haywaa.ups.domain.entity.ResourceDO;
-import com.haywaa.ups.domain.entity.RoleDO;
 import com.haywaa.ups.domain.exception.BizException;
-import com.haywaa.ups.cooperate.CooperateService;
+import com.haywaa.ups.permission.bo.OperatorInfo;
 import com.haywaa.ups.permission.service.ModuleService;
+import com.haywaa.ups.permission.service.OperateAuthCheckService;
 import com.haywaa.ups.permission.service.ResourceService;
-import com.haywaa.ups.permission.service.RoleService;
 import com.haywaa.ups.permission.service.SystemService;
-import com.haywaa.ups.utils.AuthUtil;
 
 /**
  * @description
@@ -40,7 +38,7 @@ public class ResourceServiceImpl implements ResourceService {
     private CooperateService cooperateService;
 
     @Autowired
-    private RoleService roleService;
+    private OperateAuthCheckService operateAuthCheckService;
 
     @Override
     public List<ResourceDO> selectAll(String systemCode, String status) {
@@ -53,12 +51,12 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Override
     public Integer insert(ResourceDO resourceDO, OperatorInfo operator) {
-        // 仅超级管理与或系统管理员可操作
-        List<RoleDO> handlerRoles = roleService.selectValidRolesByUserId(operator.getUserId());
-        if (AuthUtil.isSuperAdmin(handlerRoles)
-                || AuthUtil.isSystemAdmin(handlerRoles, resourceDO.getSystemCode())) {
-            throw new BizException(ErrorCode.PERMISSION_DENIED.getErrorNo(), "无操作权限");
+        // 仅超级管理, UPS管理员或系统管理员可操作
+        if (!operateAuthCheckService.isUpsAdmin(operator.getUserId(), operator.getChannel())
+                && ! operateAuthCheckService.isSystemAdmin(operator.getUserId(), operator.getChannel(), resourceDO.getSystemCode())) {
+            throw ErrorCode.PERMISSION_DENIED.toBizException();
         }
+
         systemService.checkCodeIsValid(resourceDO.getSystemCode());
         moduleService.checkCodeIsValid(resourceDO.getSystemCode(), resourceDO.getModuleCode());
         checkParentCode(resourceDO.getSystemCode(), resourceDO.getParentCode());
@@ -82,11 +80,10 @@ public class ResourceServiceImpl implements ResourceService {
             return;
         }
 
-        // 仅超级管理与或系统管理员可操作
-        List<RoleDO> handlerRoles = roleService.selectValidRolesByUserId(operator.getUserId());
-        if (AuthUtil.isSuperAdmin(handlerRoles)
-                || AuthUtil.isSystemAdmin(handlerRoles, resourceInDb.getSystemCode())) {
-            throw new BizException(ErrorCode.PERMISSION_DENIED.getErrorNo(), "无操作权限");
+        // 仅超级管理, UPS管理员或系统管理员可操作
+        if (!operateAuthCheckService.isUpsAdmin(operator.getUserId(), operator.getChannel())
+                && ! operateAuthCheckService.isSystemAdmin(operator.getUserId(), operator.getChannel(), resourceInDb.getSystemCode())) {
+            throw ErrorCode.PERMISSION_DENIED.toBizException();
         }
 
         checkParentCode(resourceInDb.getSystemCode(), resourceDO.getParentCode());

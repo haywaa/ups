@@ -117,6 +117,7 @@
         WHERE
             user_id = #{userId}
             AND system_code = #{systemCode}
+            AND channel = #{channel}
     </select>
 
 <!--auto generated Code-->

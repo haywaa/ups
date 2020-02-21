@@ -1,5 +1,6 @@
 package com.haywaa.ups.domain.entity;
 
+import com.haywaa.ups.domain.constants.RoleType;
 import com.haywaa.ups.domain.constants.ValidStatus;
 
 import lombok.Data;
@@ -34,8 +35,9 @@ public class RoleDO extends BaseDO<Integer> {
 
     /**
      * admin 且 moduleCode不为空为业务模块管理员，moduleCode为空为系统管理员
+     * @see RoleType#toString()
      */
-    private Integer type;
+    private String type;
 
     /**
      * @see ValidStatus#toString()

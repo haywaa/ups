@@ -1,5 +1,6 @@
 package com.haywaa.ups.rest.param;
 
+import com.haywaa.ups.domain.constants.RoleType;
 import com.haywaa.ups.domain.constants.ValidStatus;
 import com.haywaa.ups.domain.entity.RoleDO;
 
@@ -37,8 +38,9 @@ public class RoleParam {
 
     /**
      * admin 且 moduleCode不为空为业务模块管理员，moduleCode为空为系统管理员
+     * @see RoleType#toString()
      */
-    private Integer type;
+    private String type;
 
     /**
      * @see ValidStatus#toString()

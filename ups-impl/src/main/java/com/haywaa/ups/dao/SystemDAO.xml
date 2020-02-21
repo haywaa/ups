@@ -112,6 +112,12 @@
         WHERE code = #{code}
     </select>
 
+    <select id="selectById" resultMap="AllColumnMap">
+        SELECT <include refid="all_column"/>
+        FROM permission_system
+        WHERE id = #{id}
+    </select>
+
 <!--auto generated Code-->
     <delete id="delete">
         DELETE FROM permission_system where id = #{id}

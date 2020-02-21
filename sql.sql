@@ -56,7 +56,7 @@ CREATE TABLE `permission_role` (
   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `name` varchar(100) DEFAULT NULL COMMENT '角色名称',
   `code` varchar(100) DEFAULT '' COMMENT '角色代号，推荐appcode+rolecode',
-  `type` varchar(50) DEFAULT NULL COMMENT '角色类型，超级管理员、系统管理员',
+  `type` varchar(20) DEFAULT NULL COMMENT '角色类型，超级管理员、系统管理员',
   `status` varchar(10) NOT NULL COMMENT '状态',
   `system_code` varchar(64) NOT NULL DEFAULT '' COMMENT '系统编号',
   `module_code` varchar(64) DEFAULT NULL COMMENT '业务模块编号',
@@ -148,7 +148,7 @@ VALUES (1, '权限系统', 'UPS', 1, '权限管理系统');
 
 
 INSERT INTO `permission_role`(id, `name`, `code`, `type`, `status`, `system_code`, `comment`)
-VALUES (1, '超级管理员', 'ROOT', 1, 1, 'UPS', '超级管理员');
+VALUES (1, '超级管理员', 'ROOT', 'ROOT', 1, 'UPS', '超级管理员');
 
 -- INSERT INTO `permission_user_role`(`uid`, `role_id) VALUES ({uid}, 1);
 

@@ -19,7 +19,7 @@ public interface RoleDAO {
 
     RoleDO selectById(@Param("id") Integer id);
 
-    List<RoleDO> selectByUserId(@Param("userId") Long userId, @Param("status") String status);
+    List<RoleDO> selectByIds(@Param("ids") List<Integer> ids, @Param("status") String status);
 
     List<RoleDO> selectBySystemCode(@Param("systemCode") String systemCode, @Param("status") String status);
 

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,9 @@ import org.springframework.util.StringUtils;
 import com.haywaa.ups.dao.ResourceDAO;
 import com.haywaa.ups.dao.RoleDAO;
 import com.haywaa.ups.dao.RoleResourceDAO;
+import com.haywaa.ups.dao.UserRoleDAO;
+import com.haywaa.ups.domain.constants.RoleType;
+import com.haywaa.ups.domain.entity.UserRoleDO;
 import com.haywaa.ups.permission.bo.OperatorInfo;
 import com.haywaa.ups.domain.constants.ErrorCode;
 import com.haywaa.ups.domain.constants.ResourceType;
@@ -25,6 +29,7 @@ import com.haywaa.ups.domain.exception.BizException;
 import com.haywaa.ups.domain.query.RoleQuery;
 import com.haywaa.ups.cooperate.CooperateService;
 import com.haywaa.ups.permission.service.ModuleService;
+import com.haywaa.ups.permission.service.OperateAuthCheckService;
 import com.haywaa.ups.permission.service.RoleService;
 import com.haywaa.ups.permission.service.SystemService;
 import com.haywaa.ups.utils.AuthUtil;
@@ -44,6 +49,9 @@ public class RoleServiceImpl implements RoleService {
     private RoleDAO roleDAO;
 
     @Autowired
+    private UserRoleDAO userRoleDAO;
+
+    @Autowired
     private ResourceDAO resourceDAO;
 
     @Autowired
@@ -55,18 +63,20 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     private ModuleService moduleService;
 
+    @Autowired
+    private OperateAuthCheckService operateAuthCheckService;
+
 
     @Override
     public Integer insert(RoleDO roleDO, OperatorInfo operator) {
-        // 仅超级管理与或系统管理员可操作
-        List<RoleDO> handlerRoles = selectValidRolesByUserId(operator.getUserId());
-        if (AuthUtil.isSuperAdmin(handlerRoles)
-                || AuthUtil.isSystemAdmin(handlerRoles, roleDO.getSystemCode())) {
-            throw new BizException(ErrorCode.PERMISSION_DENIED.getErrorNo(), "无操作权限");
+        // 仅超级管理, UPS管理员或系统管理员可操作
+        if (!operateAuthCheckService.isUpsAdmin(operator.getUserId(), operator.getChannel())
+                && ! operateAuthCheckService.isSystemAdmin(operator.getUserId(), operator.getChannel(), roleDO.getSystemCode())) {
+            throw ErrorCode.PERMISSION_DENIED.toBizException();
         }
 
-        if (AuthUtil.isSuperAdmin(roleDO)) {
-            throw new BizException(ErrorCode.INVALID_PARAM.getErrorNo(), "无效的参数：超级管理员角色不能新增");
+        if (RoleType.ROOT.toString().equals(roleDO.getType())) {
+            throw new BizException(ErrorCode.INVALID_PARAM.getErrorNo(), "超级管理员角色不能新增");
         }
 
         systemService.checkCodeIsValid(roleDO.getSystemCode());
@@ -89,15 +99,14 @@ public class RoleServiceImpl implements RoleService {
             return;
         }
 
-        List<RoleDO> handlerRoles = selectValidRolesByUserId(operator.getUserId());
-        // 仅超级管理与或系统管理员可操作
-        if (AuthUtil.isSuperAdmin(handlerRoles)
-                || AuthUtil.isSystemAdmin(handlerRoles, roleIndb.getSystemCode())) {
-            throw new BizException(ErrorCode.PERMISSION_DENIED.getErrorNo(), "无操作权限");
+        // 仅超级管理, UPS管理员或系统管理员可操作
+        if (!operateAuthCheckService.isUpsAdmin(operator.getUserId(), operator.getChannel())
+                && ! operateAuthCheckService.isSystemAdmin(operator.getUserId(), operator.getChannel(), roleIndb.getSystemCode())) {
+            throw ErrorCode.PERMISSION_DENIED.toBizException();
         }
 
-        if (AuthUtil.isSuperAdmin(roleIndb)) {
-            throw new BizException(ErrorCode.INVALID_PARAM.getErrorNo(), "无效的参数：超级管理员角色不能被修改");
+        if (RoleType.ROOT.toString().equals(roleIndb.getType())) {
+            throw new BizException(ErrorCode.INVALID_PARAM.getErrorNo(), "超级管理员角色不能被修改");
         }
 
         if (roleDO.getSystemCode() != null && !roleDO.getSystemCode().equals(roleIndb.getSystemCode())) {
@@ -127,11 +136,10 @@ public class RoleServiceImpl implements RoleService {
         }
 
         RoleDO roleIndb = checkValidRoleId(roleId);
-        List<RoleDO> handlerRoles = selectValidRolesByUserId(operator.getUserId());
-        // 仅超级管理与或系统管理员可操作
-        if (AuthUtil.isSuperAdmin(handlerRoles)
-                || AuthUtil.isSystemAdmin(handlerRoles, roleIndb.getSystemCode())) {
-            throw new BizException(ErrorCode.PERMISSION_DENIED.getErrorNo(), "无操作权限");
+        // 仅超级管理, UPS管理员或系统管理员可操作
+        if (!operateAuthCheckService.isUpsAdmin(operator.getUserId(), operator.getChannel())
+                && ! operateAuthCheckService.isSystemAdmin(operator.getUserId(), operator.getChannel(), roleIndb.getSystemCode())) {
+            throw ErrorCode.PERMISSION_DENIED.toBizException();
         }
 
         List<ResourceDO> systemResourceList = resourceDAO.selectBySystemCode(roleIndb.getSystemCode(), ValidStatus.VALID.toString());
@@ -184,12 +192,18 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<RoleDO> selectValidRolesByUserId(Long userId) {
-        if (userId == null) {
+    public List<RoleDO> selectValidRolesByUserId(Long userId, String channel, String systemCode) {
+        if (userId == null || StringUtils.isEmpty(channel) || StringUtils.isEmpty(systemCode)) {
             return null;
         }
 
-        return roleDAO.selectByUserId(userId, ValidStatus.VALID.toString());
+        List<UserRoleDO> userRoleDOList = userRoleDAO.selectByUserId(userId, channel, systemCode);
+        if (CollectionUtils.isEmpty(userRoleDOList)) {
+            return null;
+        }
+
+        List<Integer> roleIds = userRoleDOList.stream().map(UserRoleDO::getRoleId).collect(Collectors.toList());
+        return roleDAO.selectByIds(roleIds, ValidStatus.VALID.toString());
     }
 
     private RoleDO checkValidRoleId(Integer roleId) {

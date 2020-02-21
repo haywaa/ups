@@ -26,7 +26,7 @@ public class RoleVO {
 
     private String moduleCode;
 
-    private Integer type;
+    private String type;
 
     /**
      * @see ValidStatus#toString()

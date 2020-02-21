@@ -12,5 +12,7 @@ public class OperatorInfo {
 
     private Long userId;
 
+    private String channel;
+
     private String operatorCode;
 }

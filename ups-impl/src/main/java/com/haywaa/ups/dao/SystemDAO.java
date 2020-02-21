@@ -22,4 +22,6 @@ public interface SystemDAO {
 
     SystemDO selectByCode(@Param("code") String code);
 
+    SystemDO selectById(@Param("id") Integer id);
+
 }

@@ -5,29 +5,28 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 
+import com.haywaa.ups.cooperate.CooperateService;
 import com.haywaa.ups.cooperate.bo.UserEventBO;
 import com.haywaa.ups.dao.RoleDAO;
 import com.haywaa.ups.dao.UserRoleDAO;
-import com.haywaa.ups.permission.bo.OperatorInfo;
 import com.haywaa.ups.domain.constants.ErrorCode;
 import com.haywaa.ups.domain.constants.ValidStatus;
 import com.haywaa.ups.domain.entity.RoleDO;
 import com.haywaa.ups.domain.entity.UserRoleDO;
 import com.haywaa.ups.domain.exception.BizException;
+import com.haywaa.ups.permission.bo.OperatorInfo;
+import com.haywaa.ups.permission.service.OperateAuthCheckService;
+import com.haywaa.ups.permission.service.PermissionGrantService;
+import com.haywaa.ups.permission.service.SystemService;
 import com.haywaa.ups.rpc.request.UserRoleDelReq;
 import com.haywaa.ups.rpc.request.UserRoleGrantReq;
-import com.haywaa.ups.cooperate.CooperateService;
-import com.haywaa.ups.permission.service.PermissionGrantService;
-import com.haywaa.ups.permission.service.RoleService;
-import com.haywaa.ups.permission.service.SystemService;
 import com.haywaa.ups.user.UserService;
 import com.haywaa.ups.user.bo.UserCheckBO;
-import com.haywaa.ups.utils.AuthUtil;
 
 /**
  * @description
@@ -50,10 +49,10 @@ public class PermissionGrantServiceImpl implements PermissionGrantService {
     private RoleDAO roleDAO;
 
     @Autowired
-    private RoleService roleService;
+    private UserService userService;
 
     @Autowired
-    private UserService userService;
+    private OperateAuthCheckService operateAuthCheckService;
 
     @Override
     public void grantPermission(UserRoleGrantReq grantReq, OperatorInfo operator) {
@@ -88,11 +87,10 @@ public class PermissionGrantServiceImpl implements PermissionGrantService {
             return checkBO;
         }).collect(Collectors.toList()));
 
-        // 仅超级管理与或系统管理员可操作
-        List<RoleDO> handlerRoles = roleService.selectValidRolesByUserId(operator.getUserId());
-        if (AuthUtil.isSuperAdmin(handlerRoles)
-                || AuthUtil.isSystemAdmin(handlerRoles, systemCode)) {
-            throw new BizException(ErrorCode.PERMISSION_DENIED.getErrorNo(), "无操作权限");
+        // 仅超级管理, UPS管理员或系统管理员可操作
+        if (!operateAuthCheckService.isUpsAdmin(operator.getUserId(), operator.getChannel())
+                && ! operateAuthCheckService.isSystemAdmin(operator.getUserId(), operator.getChannel(), grantReq.getSystemCode())) {
+            throw ErrorCode.PERMISSION_DENIED.toBizException();
         }
 
         List<RoleDO> systemRoleList = roleDAO.selectBySystemCode(systemCode, ValidStatus.VALID.toString());
@@ -153,11 +151,10 @@ public class PermissionGrantServiceImpl implements PermissionGrantService {
 
         systemService.checkCodeIsValid(delReq.getSystemCode());
 
-        // 仅超级管理与或系统管理员可操作
-        List<RoleDO> handlerRoles = roleService.selectValidRolesByUserId(operator.getUserId());
-        if (AuthUtil.isSuperAdmin(handlerRoles)
-                || AuthUtil.isSystemAdmin(handlerRoles, delReq.getSystemCode())) {
-            throw new BizException(ErrorCode.PERMISSION_DENIED.getErrorNo(), "无操作权限");
+        // 仅超级管理, UPS管理员或系统管理员可操作
+        if (!operateAuthCheckService.isUpsAdmin(operator.getUserId(), operator.getChannel())
+                && ! operateAuthCheckService.isSystemAdmin(operator.getUserId(), operator.getChannel(), delReq.getSystemCode())) {
+            throw ErrorCode.PERMISSION_DENIED.toBizException();
         }
 
         List<RoleDO> systemRoleList = roleDAO.selectBySystemCode(delReq.getSystemCode(), ValidStatus.VALID.toString());

@@ -147,16 +147,18 @@
         WHERE id = #{id}
     </select>
 
-    <select id="selectByUserId" resultMap="AllColumnMap">
+    <select id="selectByIds" resultMap="AllColumnMap">
         select
             <include refid="all_column_role"/>
-        from permission_role t
-        join permission_user_role p
-            on t.id=p.role_id
-        where p.user_id=#{userId,jdbcType=INTEGER}
-        <if test="status != null">
-            and t.status=#{status}
-        </if>
+        from permission_role
+        where
+            id IN
+            <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            <if test="status != null">
+                and status=#{status}
+            </if>
     </select>
 
     <select id="selectBySystemCode" resultMap="AllColumnMap">

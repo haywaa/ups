@@ -5,17 +5,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.haywaa.ups.cooperate.CooperateService;
 import com.haywaa.ups.dao.SystemDAO;
-import com.haywaa.ups.permission.bo.OperatorInfo;
 import com.haywaa.ups.domain.constants.ErrorCode;
 import com.haywaa.ups.domain.constants.ValidStatus;
-import com.haywaa.ups.domain.entity.RoleDO;
 import com.haywaa.ups.domain.entity.SystemDO;
 import com.haywaa.ups.domain.exception.BizException;
-import com.haywaa.ups.cooperate.CooperateService;
-import com.haywaa.ups.permission.service.RoleService;
+import com.haywaa.ups.permission.bo.OperatorInfo;
+import com.haywaa.ups.permission.service.OperateAuthCheckService;
 import com.haywaa.ups.permission.service.SystemService;
-import com.haywaa.ups.utils.AuthUtil;
 
 /**
  * @description
@@ -32,7 +30,7 @@ public class SystemServiceImpl implements SystemService {
     private CooperateService cooperateService;
 
     @Autowired
-    private RoleService roleService;
+    private OperateAuthCheckService operateAuthCheckService;
 
     @Override
     public List<SystemDO> selectAll(String status) {
@@ -41,10 +39,9 @@ public class SystemServiceImpl implements SystemService {
 
     @Override
     public Integer insert(SystemDO systemDO, OperatorInfo operator) {
-        // 仅超级管理与或系统管理员可操作
-        List<RoleDO> handlerRoles = roleService.selectValidRolesByUserId(operator.getUserId());
-        if (AuthUtil.isSuperAdmin(handlerRoles)) {
-            throw new BizException(ErrorCode.PERMISSION_DENIED.getErrorNo(), "无操作权限");
+        // 仅超级管理, UPS管理员可操作
+        if (!operateAuthCheckService.isUpsAdmin(operator.getUserId(), operator.getChannel())) {
+            throw ErrorCode.PERMISSION_DENIED.toBizException();
         }
 
         systemDO.setCreator(operator.getOperatorCode());
@@ -62,11 +59,14 @@ public class SystemServiceImpl implements SystemService {
             throw new BizException(ErrorCode.INVALID_PARAM.getErrorNo(), "无效的参数：系统ID不能为空");
         }
 
-        // 仅超级管理与或系统管理员可操作
-        List<RoleDO> handlerRoles = roleService.selectValidRolesByUserId(operator.getUserId());
-        if (AuthUtil.isSuperAdmin(handlerRoles)
-                || AuthUtil.isSystemAdmin(handlerRoles, systemDO.getCode())) {
-            throw new BizException(ErrorCode.PERMISSION_DENIED.getErrorNo(), "无操作权限");
+        SystemDO systemDoInDb = systemDAO.selectById(systemDO.getId());
+        if (systemDoInDb == null) {
+            return;
+        }
+
+        // 仅超级管理, UPS管理员可操作
+        if (!operateAuthCheckService.isUpsAdmin(operator.getUserId(), operator.getChannel())) {
+            throw ErrorCode.PERMISSION_DENIED.toBizException();
         }
 
         systemDO.setCode(null);

@@ -28,7 +28,7 @@ public interface RoleService {
      */
     List<Integer> queryResourceIds(Integer roleId);
 
-    List<RoleDO> selectValidRolesByUserId(Long userId);
+    List<RoleDO> selectValidRolesByUserId(Long userId, String channel, String systemCode);
 
     List<RoleDO> selectAll(RoleQuery query);
 }
