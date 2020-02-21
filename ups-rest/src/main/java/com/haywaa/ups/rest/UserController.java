@@ -67,7 +67,7 @@ public class UserController {
     }
 
     /**
-     * 用户授权角色接口
+     * 用户删除角色接口
      */
     @PostMapping(value = "/role", params = "method=remove")
     public HttpResult removeUserRole(UserRoleDelReq delReq) {

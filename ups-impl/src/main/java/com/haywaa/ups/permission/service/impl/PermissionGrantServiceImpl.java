@@ -14,6 +14,7 @@ import com.haywaa.ups.cooperate.CooperateService;
 import com.haywaa.ups.cooperate.bo.UserEventBO;
 import com.haywaa.ups.dao.RoleDAO;
 import com.haywaa.ups.dao.UserRoleDAO;
+import com.haywaa.ups.domain.constants.Constants;
 import com.haywaa.ups.domain.constants.ErrorCode;
 import com.haywaa.ups.domain.constants.ValidStatus;
 import com.haywaa.ups.domain.entity.RoleDO;
@@ -65,6 +66,10 @@ public class PermissionGrantServiceImpl implements PermissionGrantService {
             throw new BizException(ErrorCode.INVALID_PARAM.getErrorNo(), "请提交系统编号");
         }
 
+        if (Constants.SYSTEM_UPS.equals(systemCode)) {
+            throw ErrorCode.INVALID_PARAM.toBizException("UPS角色仅不支持通过API修改");
+        }
+
         List<UserRoleGrantReq.UserRoleItem> userRoleItemList = grantReq.getUserRoleItemList();
         if (CollectionUtils.isEmpty(userRoleItemList)) {
             throw new BizException(ErrorCode.INVALID_PARAM.getErrorNo(), "请提交待授权角色");
@@ -87,11 +92,12 @@ public class PermissionGrantServiceImpl implements PermissionGrantService {
             return checkBO;
         }).collect(Collectors.toList()));
 
+        // API 调用不做权限控制，由调用方自行管理，提高灵活性
         // 仅超级管理, UPS管理员或系统管理员可操作
-        if (!operateAuthCheckService.isUpsAdmin(operator.getUserId(), operator.getChannel())
-                && ! operateAuthCheckService.isSystemAdmin(operator.getUserId(), operator.getChannel(), grantReq.getSystemCode())) {
-            throw ErrorCode.PERMISSION_DENIED.toBizException();
-        }
+        //if (!operateAuthCheckService.isUpsAdmin(operator.getUserId(), operator.getChannel())
+        //        && ! operateAuthCheckService.isSystemAdmin(operator.getUserId(), operator.getChannel(), grantReq.getSystemCode())) {
+        //    throw ErrorCode.PERMISSION_DENIED.toBizException();
+        //}
 
         List<RoleDO> systemRoleList = roleDAO.selectBySystemCode(systemCode, ValidStatus.VALID.toString());
         if (CollectionUtils.isEmpty(systemRoleList)) {

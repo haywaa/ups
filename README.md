@@ -37,3 +37,7 @@
 - 分配角色 POST user/role?method=add √
 - 移除角色 POST user/role?method=remove √
 
+## 前端
+### config/config.js配置([参考链接](https://umijs.org/guide/config.html#configuration-file))
+outputPath 指定dist目录，默认.dist
+

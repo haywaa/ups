@@ -33,6 +33,7 @@
         <module>ups-client</module>
         <module>ups-impl</module>
         <module>ups-server</module>
+        <module>ups-web</module>
     </modules>
 
     <dependencyManagement>

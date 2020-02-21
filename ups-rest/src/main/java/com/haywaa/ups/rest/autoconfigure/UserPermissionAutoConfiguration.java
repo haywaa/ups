@@ -1,4 +1,4 @@
-package com.haywaa.ups.autoconfigure;
+package com.haywaa.ups.rest.autoconfigure;
 
 import javax.sql.DataSource;
 
