@@ -5,13 +5,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.haywaa.ups.permission.bo.OperatorInfo;
 import com.haywaa.ups.domain.entity.UserDO;
+import com.haywaa.ups.permission.bo.OperatorInfo;
+import com.haywaa.ups.permission.service.PermissionGrantService;
 import com.haywaa.ups.rest.param.UserParam;
 import com.haywaa.ups.rest.web.HttpResult;
 import com.haywaa.ups.rest.web.OperateContext;
-import com.haywaa.ups.permission.service.PermissionGrantService;
-import com.haywaa.ups.permission.service.PermissionQueryService;
 import com.haywaa.ups.rpc.dto.request.UserRoleDelReq;
 import com.haywaa.ups.rpc.dto.request.UserRoleGrantReq;
 import com.haywaa.ups.user.UserService;
@@ -30,9 +29,6 @@ public class UserController {
 
     @Autowired
     private PermissionGrantService permissionGrantService;
-
-    @Autowired
-    private PermissionQueryService permissionQueryService;
 
     /**
      * 用户同步接口, 将用户同步至本地
