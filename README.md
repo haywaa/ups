@@ -41,3 +41,9 @@
 ### config/config.js配置([参考链接](https://umijs.org/guide/config.html#configuration-file))
 outputPath 指定dist目录，默认.dist
 
+### 基于区块开发
+https://pro.ant.design/docs/block-cn
+ 基于 block 开发，快速构建标准页面
+ npm run ui
+ 获取全部区块
+ npm run fetch:blocks
