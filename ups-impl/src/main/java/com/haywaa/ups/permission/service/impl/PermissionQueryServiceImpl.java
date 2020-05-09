@@ -209,7 +209,7 @@ public class PermissionQueryServiceImpl implements PermissionQueryService, Initi
 
         permissionCache.setUserRoleItems(userRoleDOList.stream().map(userRoleDO -> {
             UserPermissionCache.UserRoleItem roleItem = new UserPermissionCache.UserRoleItem();
-            roleItem.setRoleId(userRoleDO.getId());
+            roleItem.setRoleId(userRoleDO.getRoleId());
             roleItem.setRelatedKey(userRoleDO.getRelatedKey());
             return roleItem;
         }).collect(Collectors.toList()));
