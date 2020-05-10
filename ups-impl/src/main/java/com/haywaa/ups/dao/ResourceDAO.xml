@@ -175,8 +175,8 @@
         select
         <include refid="all_column_resource"/>
         from permission_resource t
-        <if test="status == 1">
-            inner join permission_module m on m.system_code = t.system_code AND m.module_code = t.module_code
+        <if test="status != null">
+            inner join permission_module m on m.system_code = t.system_code AND m.code = t.module_code
         </if>
         where t.system_code=#{systemCode}
         <if test="status != null">
