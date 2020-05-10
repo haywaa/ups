@@ -182,8 +182,8 @@
         <if test="status != null">
             and t.status=#{status}
         </if>
-        <if test="status == 1">
-            and m.status = 1
+        <if test="status != null">
+            and m.status = #{status}
         </if>
     </select>
 

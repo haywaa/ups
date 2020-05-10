@@ -103,7 +103,7 @@
     <select id="selectValidSystem" resultMap="AllColumnMap">
         SELECT <include refid="all_column"/>
         FROM permission_system
-        WHERE status = 1
+        WHERE status = 'VALID'
     </select>
 
     <select id="selectByCode" resultMap="AllColumnMap">
