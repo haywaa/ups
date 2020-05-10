@@ -93,7 +93,7 @@
     <select id="selectResourceIds" resultType="java.lang.Integer">
         SELECT resource_id
         FROM permission_role_resource
-        WHERE role_id = #{pojo.roleId}
+        WHERE role_id = #{roleId}
     </select>
 
     <select id="selectByRoleIds" resultMap="AllColumnMap">

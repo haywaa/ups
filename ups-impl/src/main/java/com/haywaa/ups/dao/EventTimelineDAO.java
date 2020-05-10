@@ -13,9 +13,9 @@ import com.haywaa.ups.domain.entity.EventTimelineDO;
  */
 public interface EventTimelineDAO {
 
-    Integer insert(EventTimelineDO pojo);
+    Integer insert(@Param("pojo") EventTimelineDO pojo);
 
-    Integer insertList(List<EventTimelineDO> pojos);
+    Integer insertList(@Param("pojos") List<EventTimelineDO> pojos);
 
     Long selectMaxId();
 
