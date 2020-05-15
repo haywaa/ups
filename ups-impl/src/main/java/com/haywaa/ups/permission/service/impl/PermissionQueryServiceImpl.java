@@ -157,7 +157,7 @@ public class PermissionQueryServiceImpl implements PermissionQueryService, Initi
             UserPermissionDTO.RoleItem roleItem = new UserPermissionDTO.RoleItem();
             roleItem.setRoleId(roleId);
             roleItem.setRelatedKey(userRoleItem.getRelatedKey());
-            roleItem.setRoleCode(roleItem.getRoleCode());
+            roleItem.setRoleCode(roleDO.getCode());
             return roleItem;
         })
                 .filter(Objects::nonNull)
