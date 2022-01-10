@@ -32,7 +32,7 @@ public class CooperateServiceImpl implements CooperateService, ApplicationListen
 
     private static final String EVENT_MODULE_UPDATE = "module_update";
 
-    private static final String EVENT_RESOURCE_UPDATE = "role_update";
+    private static final String EVENT_RESOURCE_UPDATE = "resource_update";
 
     private static final String EVENT_ROLE_UPDATE = "role_update";
 
