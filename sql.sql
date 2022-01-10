@@ -131,7 +131,7 @@ CREATE TABLE `permission_setting` (
 
 CREATE TABLE `permission_event` (
   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `event_type` varchar(64) DEFAULT NULL COMMENT '类型，0 will, 1 done',
+  `event_type` tinyint(8) DEFAULT NULL COMMENT '类型，0 will, 1 done',
   `event_code` varchar(64) DEFAULT NULL COMMENT 'code',
   `val` varchar(64) DEFAULT NULL COMMENT '值',
   `val1` varchar(64) DEFAULT NULL COMMENT '值',
